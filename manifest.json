@@ -1,0 +1,99 @@
+{
+	"sap.app": {
+		"id": "yahor.andryieuski",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"applicationVersion": {
+			"version": "1.0.0"
+		}
+	},
+	"sap.ui": {
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		},
+		"supportedThemes": [
+			"sap_belize"
+		]
+	},
+	"sap.ui5": {
+		"rootView": "yahor.andryieuski.view.App",
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "yahor.andryieuski.view",
+				"controlId": "RootApp",
+				"controlAggregation": "pages",
+				"bypassed": {
+					"target": [
+						"notFound"
+					]
+				},
+				"async": true
+			},
+			"routes": [
+				{
+					"pattern": "",
+					"name": "FirstPage",
+					"target": [
+						"firstPage"
+					]
+				},
+				{
+					"pattern": "second",
+					"name": "SecondPage",
+					"target": [
+						"secondPage"
+					]
+				},
+				{
+					"pattern": "third",
+					"name": "ThirdPage",
+					"target": [
+						"thirdPage"
+					]
+				}
+			],
+
+			"targets": {
+				"firstPage": {
+					"viewName": "StoresOverview",
+					"viewId": "firstPage",
+					"viewLevel": 1
+				},
+				"secondPage": {
+					"viewName": "StoreDetails",
+					"viewId": "secondPage",
+					"viewLevel": 2
+				},
+				"thirdPage": {
+					"viewName": "ProductDetails",
+					"viewId": "thirdPage",
+					"viewLevel": 3
+				},
+				"notFound": {
+					"viewName": "NotFound",
+					"viewId": "notFound"
+				}
+			}
+		},
+		"dependencies": {
+			"minUI5Version": "1.54.0",
+			"libs": {
+				"sap.m": {}
+			}
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "yahor.andryieuski.i18n.i18n"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,19 @@
+<mvc:View
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	controllerName="yahor.andryieuski.controller.NotFound">
+
+	<MessagePage
+		title="Not Found"
+		text="The requested resource was not found"
+		icon="{sap-icon://document}"
+		id="page"
+		description="">
+
+		<customDescription>
+            <Link text="Go to first page" press="onLinkPress"/>
+        </customDescription>
+
+	</MessagePage>
+
+</mvc:View>

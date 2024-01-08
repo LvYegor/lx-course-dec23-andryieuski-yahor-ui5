@@ -1,0 +1,12 @@
+<mvc:View
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	controllerName="yahor.andryieuski.controller.ProductDetails">
+
+	<Page title="Third page">
+		<content>
+			<Button text="First page" press="onFirstPageButtonPress" />
+		</content>
+	</Page>
+
+</mvc:View>
