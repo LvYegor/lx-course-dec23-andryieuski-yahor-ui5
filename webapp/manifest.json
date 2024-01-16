@@ -7,6 +7,15 @@
 		"description": "{{appDescription}}",
 		"applicationVersion": {
 			"version": "1.0.0"
+		},
+		"dataSources": {
+			"mainService": {
+				"uri": "http://localhost:3000/odata/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0"
+				}
+			}
 		}
 	},
 	"sap.ui": {
@@ -38,41 +47,41 @@
 			"routes": [
 				{
 					"pattern": "",
-					"name": "FirstPage",
+					"name": "StoresOverview",
 					"target": [
-						"firstPage"
+						"storesOverview"
 					]
 				},
 				{
-					"pattern": "second",
-					"name": "SecondPage",
+					"pattern": "store-details/{storeID}",
+					"name": "StoreDetails",
 					"target": [
-						"secondPage"
+						"storeDetails"
 					]
 				},
 				{
-					"pattern": "third",
-					"name": "ThirdPage",
+					"pattern": "product-details/{productID}",
+					"name": "ProductDetails",
 					"target": [
-						"thirdPage"
+						"productDetails"
 					]
 				}
 			],
 
 			"targets": {
-				"firstPage": {
+				"storesOverview": {
 					"viewName": "StoresOverview",
-					"viewId": "firstPage",
+					"viewId": "storesOverview",
 					"viewLevel": 1
 				},
-				"secondPage": {
+				"storeDetails": {
 					"viewName": "StoreDetails",
-					"viewId": "secondPage",
+					"viewId": "storeDetails",
 					"viewLevel": 2
 				},
-				"thirdPage": {
+				"productDetails": {
 					"viewName": "ProductDetails",
-					"viewId": "thirdPage",
+					"viewId": "productDetails",
 					"viewLevel": 3
 				},
 				"notFound": {
@@ -92,6 +101,14 @@
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
 					"bundleName": "yahor.andryieuski.i18n.i18n"
+				}
+			},
+			"odata": {
+				"dataSource": "mainService",
+				"settings": {
+					"defaultBindingMode": "TwoWay",
+					"defaultCountMode": "InlineRepeat",
+					"useBatch": false
 				}
 			}
 		}

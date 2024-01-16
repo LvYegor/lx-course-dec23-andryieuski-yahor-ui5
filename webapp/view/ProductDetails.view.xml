@@ -1,0 +1,86 @@
+<mvc:View
+	xmlns="sap.m"
+	xmlns:f="sap.f"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core" 
+	xmlns:l="sap.ui.layout"
+	xmlns:form="sap.ui.layout.form" 
+	controllerName="yahor.andryieuski.controller.ProductDetails">
+	<f:DynamicPage id="dynamicPage" class="sapUiNoContentPadding" showFooter="true">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:breadcrumbs>
+					<Breadcrumbs>
+						<Link press="onStoresListBreadcrumbPress" target="storesList" text="{i18n>storesList}"/>
+						<Link press="onStoreDetailsBreadcrumbPress" target="storeDetails" text="{i18n>storeDetails}"/>
+						<Link press="onProductDetailsBreadcrumbPress" target="productDetails" text="{i18n>productDetails}"/>
+					</Breadcrumbs>
+				</f:breadcrumbs>
+
+				<f:heading>
+					<Title text="{i18n>productDetails} ({odata>Name})"/>
+				</f:heading>
+			</f:DynamicPageTitle>
+		</f:title>
+
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<l:HorizontalLayout allowWrapping="true">
+					<l:VerticalLayout class="sapUiMediumMarginEnd">
+						<ObjectStatus title="{i18n>price}" text="{odata>Price} {i18n>currency}"/>
+						<ObjectStatus title="{i18n>rating}" text="{odata>Rating}"/>
+					</l:VerticalLayout>
+
+					<l:VerticalLayout class="sapUiMediumMarginEnd">
+						<ObjectStatus title="{i18n>madeIn}" text="{odata>MadeIn}"/>
+						<ObjectStatus title="{i18n>prodCompany}" text="{odata>ProductionCompanyName}"/>
+					</l:VerticalLayout>
+
+					<l:VerticalLayout class="sapUiMediumMarginEnd">
+						<ObjectStatus 
+							id="productStatus" 
+							title="{i18n>status}"	
+							inverted="true" 
+							text="{path: 'odata>Status', formatter: '.removeUnderscore'}"
+						/>
+					</l:VerticalLayout>
+				</l:HorizontalLayout>
+
+				<l:HorizontalLayout allowWrapping="true" class="sapUiTinyMarginTop">
+					<l:VerticalLayout class="sapUiMediumMarginEnd">
+						<ObjectStatus class="sapUiTinyMarginBottom" title="{i18n>specs}" text="{odata>Specs}"/>
+						<ObjectStatus title="{i18n>supplierInfo}" text="{odata>SupplierInfo}"/>
+					</l:VerticalLayout>
+				</l:HorizontalLayout>
+			</f:DynamicPageHeader>
+		</f:header>
+
+		<f:content>
+			<VBox>
+				<HBox alignItems="Center" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+					<Label text="{i18n>authorName}:" class="sapUiSmallMarginEnd" />
+					<Input value="" placeholder="{i18n>authorNamePlaceholder}"/>
+
+					<Label text="{i18n>rating}: " class="sapUiSmallMarginBeginEnd"/>
+					<RatingIndicator maxValue="5" value="0" editable="true" />
+				</HBox>
+
+				<FeedInput />
+
+				<List showSeparators="Inner" items="{appView>/ProductComments}">
+					<FeedListItem 
+						sender="{appView>Author}"
+						info="{i18n>rating}: {appView>Rating}" 
+						timestamp="{i18n>posted}: {
+							path: 'appView>Posted', 
+							type: 'sap.ui.model.type.Date', 
+							formatOptions: {style: 'medium'}
+						}" 
+						text="{appView>Message}" 
+						convertLinksToAnchorTags="All"
+					/>
+				</List>
+			</VBox>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

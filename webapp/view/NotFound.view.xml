@@ -11,7 +11,7 @@
 		description="">
 
 		<customDescription>
-            <Link text="Go to first page" press="onLinkPress"/>
+            <Link text="Go to stores list page" press="onLinkPress"/>
         </customDescription>
 
 	</MessagePage>

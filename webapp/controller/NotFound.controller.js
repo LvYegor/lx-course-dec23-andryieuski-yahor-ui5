@@ -5,11 +5,11 @@ sap.ui.define([
 
 	return Controller.extend("yahor.andryieuski.controller.NotFound", {
 		onInit: function() {
-			this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			this.oRouter = this.getOwnerComponent().getRouter();
 		},
 
 		onLinkPress: function () {
-			this.oRouter.navTo("FirstPage");
+			this.oRouter.navTo("StoresOverview");
 		}
 	});
 });
