@@ -11,9 +11,9 @@
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
 					<Breadcrumbs>
-						<Link press="onStoresListBreadcrumbPress" target="storesList" text="{i18n>storesList}"/>
-						<Link press="onStoreDetailsBreadcrumbPress" target="storeDetails" text="{i18n>storeDetails}"/>
-						<Link press="onProductDetailsBreadcrumbPress" target="productDetails" text="{i18n>productDetails}"/>
+						<Link press="onStoresListBreadcrumbPress" text="{i18n>storesList}"/>
+						<Link press="onStoreDetailsBreadcrumbPress" text="{i18n>storeDetails}"/>
+						<Link press="onProductDetailsBreadcrumbPress" text="{i18n>productDetails}"/>
 					</Breadcrumbs>
 				</f:breadcrumbs>
 
