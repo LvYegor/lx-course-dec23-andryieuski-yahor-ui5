@@ -2,8 +2,11 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
-], function (Controller, JSONModel, Filter, FilterOperator) {
+    "sap/ui/model/FilterOperator",
+	"sap/m/MessageBox",
+	"sap/m/MessageToast",
+	"sap/base/strings/formatMessage"
+], function (Controller, JSONModel, Filter, FilterOperator, MessageBox, MessageToast, formatMessage) {
 	"use strict";
 
 	return Controller.extend("yahor.andryieuski.controller.ProductDetails", {
@@ -14,8 +17,17 @@ sap.ui.define([
 				ProductComments: null,
 				ProductID: null
 			});
-	  
+
+			const oFeedModel = new JSONModel({
+				Author: "",
+				Message: "",
+				Rating: 0,
+				Posted: null,
+				ProductId: null
+			});
+
 			this.getView().setModel(oViewModel, "appView");
+			this.getView().setModel(oFeedModel, "feedModel");
 
 			this.oRouter.getRoute("ProductDetails").attachPatternMatched(this.onPatternMatched, this);
 		},
@@ -51,6 +63,10 @@ sap.ui.define([
 			this.oRouter.navTo("StoresOverview");
 		},
 
+		formatTitle: function (sProductDetails, sName) {
+			return formatMessage("{0} ({1})", [sProductDetails, sName]);
+		},
+
         onStoreDetailsBreadcrumbPress: function (oEvent) {
             const oCtx = oEvent.getSource().getBindingContext("odata");
 
@@ -58,14 +74,6 @@ sap.ui.define([
                 storeID: oCtx.getProperty("StoreId")
             });
         }, 
-
-		onProductDetailsBreadcrumbPress: function (oEvent) {
-			const oCtx = oEvent.getSource().getBindingContext("odata");
-
-            this.oRouter.navTo("ProductDetails", {
-                productID: oCtx.getProperty("id")
-            });
-		},
 
 		changeStatusStyle: function (sStatus) {
 			const statusElem = this.byId("productStatus");
@@ -79,8 +87,8 @@ sap.ui.define([
 			}
 		},
 
-		removeUnderscore: function(sStatus) {
-			if (sStatus && typeof sStatus === "string") {
+		removeUnderscore: function (sStatus) {
+			if (typeof sStatus === "string") {
 			   return sStatus.replace(/_/g, " ");
 			}
 			return sStatus;
@@ -96,6 +104,67 @@ sap.ui.define([
 				},
 				filters: [new Filter("ProductId", FilterOperator.EQ, nProductID)]
 			});
-		}
+		},
+		
+		onFeedPost: function (oEvent) { 
+			const oView = this.getView();    
+			const oBundle = oView.getModel("i18n").getResourceBundle();
+
+            const aInputs = [
+				this.byId("feedAuthor"),
+				this.byId("feedRating"),		
+			];
+
+            let bValidationError = false;
+
+            aInputs.forEach(function (oInput) {
+				bValidationError = this._validateInput(oInput) || bValidationError;
+			}, this);
+
+            if (!bValidationError) {
+				const oItem = oEvent.getSource();
+				const oContext = oItem.getBindingContext("odata");
+	
+				const payload = {
+					Author: this.byId("feedAuthor").getValue(),
+					Message: this.byId("feedText").getValue(),
+					Rating: this.byId("feedRating").getValue(),
+					Posted: new Date(),
+					ProductId: oContext.getProperty("id")
+				};
+	
+				this.getView().getModel("odata").create("/ProductComments", payload, {
+					success: this.filterCommentsByProductId()
+				});
+	
+				this.resetFeedFields();
+
+                const sFeedSendNotification = oBundle.getText("feedSendNotification");
+				MessageToast.show(sFeedSendNotification);
+			} else {
+                const sFeedValidationAlert = oBundle.getText("feedValidationAlert");
+				MessageBox.alert(sFeedValidationAlert);
+			}
+		},
+
+		resetFeedFields: function () {
+			this.byId("feedAuthor").setValue("");
+			this.byId("feedRating").setValue(0);
+			this.byId("feedText").setValue("");			
+		},
+
+		_validateInput: function (oInput) {
+			var bValidationError = false;
+			var oBinding = oInput.getBinding("value");
+
+			try {
+				oBinding.getType().validateValue(oInput.getValue());
+			} catch (oException) {
+				bValidationError = true;
+			}
+
+			return bValidationError;
+		},
+		
 	});
 });

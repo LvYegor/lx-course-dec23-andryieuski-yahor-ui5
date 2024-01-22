@@ -6,19 +6,26 @@
 	xmlns:l="sap.ui.layout"
 	xmlns:form="sap.ui.layout.form" 
 	controllerName="yahor.andryieuski.controller.ProductDetails">
-	<f:DynamicPage id="dynamicPage" class="sapUiNoContentPadding" showFooter="true">
+	<f:DynamicPage id="productDetailsPageId" class="sapUiNoContentPadding" showFooter="true">
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
 					<Breadcrumbs>
 						<Link press="onStoresListBreadcrumbPress" text="{i18n>storesList}"/>
 						<Link press="onStoreDetailsBreadcrumbPress" text="{i18n>storeDetails}"/>
-						<Link press="onProductDetailsBreadcrumbPress" text="{i18n>productDetails}"/>
+						<Link text="{i18n>productDetails}"/>
 					</Breadcrumbs>
 				</f:breadcrumbs>
 
 				<f:heading>
-					<Title text="{i18n>productDetails} ({odata>Name})"/>
+					<Title text="{
+							parts: [
+								'i18n>productDetails',
+								'odata>Name'
+							],
+							formatter: '.formatTitle'
+						}"
+					/>
 				</f:heading>
 			</f:DynamicPageTitle>
 		</f:title>
@@ -27,13 +34,13 @@
 			<f:DynamicPageHeader pinnable="true">
 				<l:HorizontalLayout allowWrapping="true">
 					<l:VerticalLayout class="sapUiMediumMarginEnd">
-						<ObjectStatus title="{i18n>price}" text="{odata>Price} {i18n>currency}"/>
-						<ObjectStatus title="{i18n>rating}" text="{odata>Rating}"/>
+						<ObjectAttribute title="{i18n>price}" text="{odata>Price} {i18n>currency}"/>
+						<ObjectAttribute title="{i18n>rating}" text="{odata>Rating}"/>
 					</l:VerticalLayout>
 
 					<l:VerticalLayout class="sapUiMediumMarginEnd">
-						<ObjectStatus title="{i18n>madeIn}" text="{odata>MadeIn}"/>
-						<ObjectStatus title="{i18n>prodCompany}" text="{odata>ProductionCompanyName}"/>
+						<ObjectAttribute title="{i18n>madeIn}" text="{odata>MadeIn}"/>
+						<ObjectAttribute title="{i18n>prodCompany}" text="{odata>ProductionCompanyName}"/>
 					</l:VerticalLayout>
 
 					<l:VerticalLayout class="sapUiMediumMarginEnd">
@@ -48,8 +55,8 @@
 
 				<l:HorizontalLayout allowWrapping="true" class="sapUiTinyMarginTop">
 					<l:VerticalLayout class="sapUiMediumMarginEnd">
-						<ObjectStatus class="sapUiTinyMarginBottom" title="{i18n>specs}" text="{odata>Specs}"/>
-						<ObjectStatus title="{i18n>supplierInfo}" text="{odata>SupplierInfo}"/>
+						<ObjectAttribute class="sapUiTinyMarginBottom" title="{i18n>specs}" text="{odata>Specs}"/>
+						<ObjectAttribute title="{i18n>supplierInfo}" text="{odata>SupplierInfo}"/>
 					</l:VerticalLayout>
 				</l:HorizontalLayout>
 			</f:DynamicPageHeader>
@@ -59,15 +66,45 @@
 			<VBox>
 				<HBox alignItems="Center" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
 					<Label text="{i18n>authorName}:" class="sapUiSmallMarginEnd" />
-					<Input value="" placeholder="{i18n>authorNamePlaceholder}"/>
+					<Input 
+						id="feedAuthor" 
+						placeholder="{i18n>authorNamePlaceholder}" 
+						value="{
+							path : 'feedModel>/Author',
+							type : 'sap.ui.model.type.String',
+							constraints : {
+								minLength: 1
+							}
+						}" 
+					/>
 
 					<Label text="{i18n>rating}: " class="sapUiSmallMarginBeginEnd"/>
-					<RatingIndicator maxValue="5" value="0" editable="true" />
+					<RatingIndicator 
+						id="feedRating" 
+						maxValue="5" 
+						editable="true" 
+						value="{
+							path : 'feedModel>/Rating',
+							type : 'sap.ui.model.type.Float',
+							constraints : {
+								minimum: 1,
+								maximum: 5
+							}
+						}" 
+					/>
 				</HBox>
 
-				<FeedInput />
+				<FeedInput id="feedText" post="onFeedPost"/>
 
-				<List showSeparators="Inner" items="{appView>/ProductComments}">
+				<List 
+					showSeparators="Inner" 
+					items="{
+						path: 'appView>/ProductComments',
+						sorter: {
+							path: 'Posted',
+							descending: true
+						}
+					}">
 					<FeedListItem 
 						sender="{appView>Author}"
 						info="{i18n>rating}: {appView>Rating}" 

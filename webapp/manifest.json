@@ -108,7 +108,8 @@
 				"settings": {
 					"defaultBindingMode": "TwoWay",
 					"defaultCountMode": "InlineRepeat",
-					"useBatch": false
+					"useBatch": false,
+					"disableHeadRequestForToken": true
 				}
 			}
 		}

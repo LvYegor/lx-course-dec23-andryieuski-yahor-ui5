@@ -3,12 +3,12 @@
 	xmlns:f="sap.f"
 	xmlns:mvc="sap.ui.core.mvc"
 	controllerName="yahor.andryieuski.controller.StoresOverview">
-	<f:DynamicPage id="dynamicPageId" class="sapUiNoContentPadding" showFooter="true">
+	<f:DynamicPage id="storesOverviewPageId" class="sapUiNoContentPadding" showFooter="true">
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:breadcrumbs>
 					<Breadcrumbs >
-						<Link press="onStoresListBreadcrumbPress" text="{i18n>storesList}"/>
+						<Link text="{i18n>storesList}"/>
 					</Breadcrumbs>
 				</f:breadcrumbs>
 				<f:heading>
@@ -20,13 +20,13 @@
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
 				<Toolbar style="Clear">
-					<SearchField width="100%" showRefreshButton="true"/>
+					<SearchField search="onStoresSearch" width="100%" showRefreshButton="true"/>
 				</Toolbar>
 			</f:DynamicPageHeader>
 		</f:header>
 
 		<f:content>
-			<List items="{odata>/Stores}">
+			<List items="{odata>/Stores}" id="storesListId">
 				<items>
 					<ObjectListItem 
 						title="{odata>Name}" 
@@ -45,7 +45,7 @@
 		<f:footer>
 			<OverflowToolbar>
 				<ToolbarSpacer/>
-				<Button icon="sap-icon://add" text="{i18n>create}"/>
+				<Button icon="sap-icon://add" text="{i18n>create}" press="onCreateStorePress" />
 			</OverflowToolbar>
 		</f:footer>
 	</f:DynamicPage>

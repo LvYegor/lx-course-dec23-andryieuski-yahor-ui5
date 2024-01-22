@@ -1,0 +1,136 @@
+<core:FragmentDefinition 
+    xmlns="sap.m" 
+    xmlns:form="sap.ui.layout.form" 
+    xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout">
+    <Dialog 
+        title="{i18n>createNewProduct}" 
+        afterClose="onAfterCloseCreateDialog">
+        <form:SimpleForm id="createProductForm">
+            <form:content>
+                <Label text="{i18n>name}"/>
+                <Input 
+                    id="createProductName"
+                    required="true" 
+                    placeholder="{i18n>enterName}" 
+                    value="{
+                        path : 'createProductModel>Name',
+                        type : 'sap.ui.model.type.String',
+                        constraints : {
+                            minLength: 1
+                        }
+                    }"
+                    change=".onFormFieldChange" 
+                />
+
+                <Label required="true" text="{i18n>price}"/>
+                <HBox alignItems="Center">
+                    <Input 
+                        id="createProductPrice"
+                        required="true" 
+                        placeholder="{i18n>enterPrice}" 
+                        value="{
+                            path : 'createProductModel>Price',
+                            type : 'sap.ui.model.type.Integer',
+                            constraints: {
+                                minimum: 1
+                            }
+                        }"
+                        change=".onFormFieldChange"
+                    />
+                    <Text class="sapUiSmallMarginBegin" text="{i18n>currency}"/>
+                </HBox>
+
+                <Label text="{i18n>specs}"/>
+                <TextArea 
+                    id="createProductSpecs"
+                    required="true" 
+                    rows="3" 
+                    placeholder="{i18n>enterSpecs}"
+                    value="{
+                        path : 'createProductModel>Specs',
+                        type : 'sap.ui.model.type.String',
+                        constraints : {
+                            minLength: 1
+                        }
+                    }"
+                    change=".onFormFieldChange"
+                />
+
+                <Label text="{i18n>rating}"/>
+                <Input 
+                    id="createProductRating"
+                    required="true" 
+                    placeholder="{i18n>enterRating}" 
+                    value="{
+                        path : 'createProductModel>Rating',
+                        type : 'sap.ui.model.type.Integer',
+                        constraints: {
+                            minimum: 1,
+                            maximum: 5
+                        }
+                    }"
+                    change=".onFormFieldChange"
+                />
+
+                <Label text="{i18n>supplierInfo}"/>
+                <TextArea 
+                    id="createProductSupplierInfo"
+                    required="true" 
+                    rows="3" 
+                    placeholder="{i18n>enterSupplierInfo}" 
+                    value="{
+                        path : 'createProductModel>SupplierInfo',
+                        type : 'sap.ui.model.type.String',
+                        constraints : {
+                            minLength: 1
+                        }
+                    }"
+                    change=".onFormFieldChange" 
+                />
+
+                <Label text="{i18n>madeIn}"/>
+                <Input 
+                    id="createProductMadeIn"
+                    required="true" 
+                    placeholder="{i18n>enterMadeIn}" 
+                    value="{
+                        path : 'createProductModel>MadeIn',
+                        type : 'sap.ui.model.type.String',
+                        constraints : {
+                            minLength: 1
+                        }
+                    }"
+                    change=".onFormFieldChange"
+                />
+
+                <Label text="{i18n>prodCompany}"/>
+                <Input 
+                    id="createProductProdCompany"
+                    required="true" 
+                    placeholder="{i18n>enterProdCompany}" 
+                    value="{
+                        path : 'createProductModel>ProductionCompanyName',
+                        type : 'sap.ui.model.type.String',
+                        constraints : {
+                            minLength: 1
+                        }
+                    }"
+                    change=".onFormFieldChange"
+                />
+
+                <Label text="{i18n>status}" required="true"/>
+                <Select selectedKey="{createProductModel>Status}" id="createProductStatus">
+                    <core:Item text="{i18n>okStatus}" key="OK"></core:Item>
+                    <core:Item text="{i18n>storageStatus}" key="STORAGE"></core:Item>
+                    <core:Item text="{i18n>outOfStockStatus}" key="OUT_OF_STOCK"></core:Item>
+                </Select>
+            </form:content>
+        </form:SimpleForm>
+
+        <buttons>
+            <Button text="{i18n>create}" press="onSubmitCreateProductPress" />
+            <Button text="{i18n>close}" press="onCancelCreateProductPress" />
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>
