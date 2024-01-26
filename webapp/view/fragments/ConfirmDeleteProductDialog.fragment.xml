@@ -1,14 +1,14 @@
-<core:FragmentDefinition 
-    xmlns="sap.m" 
+<core:FragmentDefinition
+    xmlns="sap.m"
     xmlns:core="sap.ui.core">
-    <Dialog 
+    <Dialog
         icon="sap-icon://question-mark"
-        title="{i18n>confirmation}" 
+        title="{i18n>confirmation}"
         afterClose="onAfterClose">
         <Label class="sapUiSmallMargin" text="{i18n>deleteProductConfirmText}"/>
         <buttons>
-            <Button text="{i18n>ok}" press="onSubmitDeleteProductPress" />
-            <Button text="{i18n>close}" press="onCancelDeletePress" />
+            <Button text="{i18n>ok}" press="onSubmitDeleteProductPress"/>
+            <Button text="{i18n>close}" press="onCancelDeletePress"/>
         </buttons>
     </Dialog>
 </core:FragmentDefinition>

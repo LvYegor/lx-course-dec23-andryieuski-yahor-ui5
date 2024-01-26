@@ -1,18 +1,18 @@
-<core:FragmentDefinition 
-    xmlns="sap.m" 
-    xmlns:form="sap.ui.layout.form" 
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:form="sap.ui.layout.form"
     xmlns:core="sap.ui.core">
-    <Dialog 
+    <Dialog
         id="createStoreDialog"
-        title="{i18n>createNewStore}" 
+        title="{i18n>createNewStore}"
         afterClose="onAfterCloseCreateDialog">
         <form:SimpleForm id="createStoreForm">
             <form:content>
                 <Label text="{i18n>name}"/>
-                <Input 
-                    id="createStoreName" 
-                    required="true" 
-                    placeholder="{i18n>enterName}" 
+                <Input
+                    id="createStoreName"
+                    required="true"
+                    placeholder="{i18n>enterName}"
                     value="{
                         path : 'createStoreModel>Name',
                         type : 'sap.ui.model.type.String',
@@ -24,10 +24,10 @@
                 />
 
                 <Label text="{i18n>email}"/>
-                <Input 
-                    id="createStoreEmail" 
-                    required="true" 
-                    placeholder="{i18n>enterEmail}" 
+                <Input
+                    id="createStoreEmail"
+                    required="true"
+                    placeholder="{i18n>enterEmail}"
                     value="{
                         path : 'createStoreModel>Email',
                         type : '.customEMailType'
@@ -36,10 +36,10 @@
                 />
 
                 <Label text="{i18n>phoneNumber}"/>
-                <Input 
-                    id="createStorePhoneNumber" 
-                    required="true" 
-                    placeholder="{i18n>enterPhone}"  
+                <Input
+                    id="createStorePhoneNumber"
+                    required="true"
+                    placeholder="{i18n>enterPhone}"
                     value="{
                         path : 'createStoreModel>PhoneNumber',
                         type : 'sap.ui.model.type.String',
@@ -51,10 +51,10 @@
                 />
 
                 <Label text="{i18n>address}"/>
-                <Input 
-                    id="createStoreAddress" 
-                    required="true" 
-                    placeholder="{i18n>enterAddress}" 
+                <Input
+                    id="createStoreAddress"
+                    required="true"
+                    placeholder="{i18n>enterAddress}"
                     value="{
                         path : 'createStoreModel>Address',
                         type : 'sap.ui.model.type.String',
@@ -65,11 +65,11 @@
                     change=".onFormFieldChange"
                 />
 
-                <Label text="{i18n>establishedDate}" />
-                <DatePicker 
-                    id="createStoreDate" 
-                    required="true" 
-                    placeholder="{i18n>enterDate}" 
+                <Label text="{i18n>establishedDate}"/>
+                <DatePicker
+                    id="createStoreDate"
+                    required="true"
+                    placeholder="{i18n>enterDate}"
                     value="{
                         path : 'createStoreModel>Established',
                         type : 'sap.ui.model.type.Date'
@@ -78,10 +78,10 @@
                 />
 
                 <Label text="{i18n>floorArea}"/>
-                <Input 
-                    id="createStoreFloorArea" 
-                    required="true" 
-                    placeholder="{i18n>enterFloorArea}" 
+                <Input
+                    id="createStoreFloorArea"
+                    required="true"
+                    placeholder="{i18n>enterFloorArea}"
                     value="{
                         path : 'createStoreModel>FloorArea',
                         type : 'sap.ui.model.type.Integer',
@@ -95,8 +95,8 @@
         </form:SimpleForm>
 
         <buttons>
-            <Button text="{i18n>create}" press="onSubmitCreateStorePress" />
-            <Button text="{i18n>close}" press="onCancelCreateStorePress" />
+            <Button text="{i18n>create}" press="onSubmitCreateStorePress"/>
+            <Button text="{i18n>close}" press="onCancelCreateStorePress"/>
         </buttons>
     </Dialog>
 </core:FragmentDefinition>

@@ -4,15 +4,15 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/ui/model/Sorter",
-	"sap/ui/core/Core",
-	"sap/m/MessageBox",
-	"sap/m/MessageToast"
+    "sap/ui/core/Core",
+    "sap/m/MessageBox",
+    "sap/m/MessageToast"
 ], function (Controller, JSONModel, Filter, FilterOperator, Sorter, Core, MessageBox, MessageToast) {
     "use strict";
 
-    const SORT_NONE	= null;
-    const SORT_ASC	= "ASC";
-    const SORT_DESC	= "DESC";
+    const SORT_NONE = null;
+    const SORT_ASC = "ASC";
+    const SORT_DESC = "DESC";
 
     return Controller.extend("yahor.andryieuski.controller.StoreDetails", {
         onInit: function () {
@@ -30,7 +30,7 @@ sap.ui.define([
                     selectedStatus: "ALL",
                     searchValue: ""
                 },
-                sort:{
+                sort: {
                     Name: {
                         columnName: "Name",
                         sortType: SORT_NONE
@@ -64,15 +64,15 @@ sap.ui.define([
 
             const oCreateProductModel = new JSONModel({
                 formFields: {
-					Name: "",
-					Price: null,
-					Specs: "",
-					Rating: null,
-					SupplierInfo: "",
-					MadeIn: "",
+                    Name: "",
+                    Price: null,
+                    Specs: "",
+                    Rating: null,
+                    SupplierInfo: "",
+                    MadeIn: "",
                     ProductionCompanyName: "",
                     Status: "OK"
-				}
+                }
             });
 
             this.getView().setModel(oViewModel, "appView");
@@ -90,8 +90,8 @@ sap.ui.define([
             oViewModel.setProperty("/storeID", sStoreID);
 
             oODataModel.metadataLoaded().then(function () {
-                const sKey = oODataModel.createKey("/Stores", { id: sStoreID });
-                
+                const sKey = oODataModel.createKey("/Stores", {id: sStoreID});
+
                 this.getView().bindObject({
                     path: sKey,
                     model: "odata"
@@ -115,35 +115,35 @@ sap.ui.define([
             aStatuses.slice(1).forEach(function (sStatus) {
                 this.getView().getModel("odata").read(`${sKey}/rel_Products/$count`, {
                     filters: [new Filter("Status", FilterOperator.EQ, sStatus)],
-                    success: function(oData) {
+                    success: function (oData) {
                         oViewModel.setProperty("/statusAmount/" + sStatus.toLowerCase(), oData);
                     }
                 });
-            }.bind(this));      
+            }.bind(this));
         },
-        
+
         onStoresListBreadcrumbPress: function (oEvent) {
-			this.oRouter.navTo("StoresOverview");
-		},
+            this.oRouter.navTo("StoresOverview");
+        },
 
         onProductItemPress: function (oEvent) {
             const oCtx = oEvent.getSource().getBindingContext("odata");
-            
+
             this.oRouter.navTo("ProductDetails", {
                 productID: oCtx.getProperty("id")
             });
         },
-        
-        sortTypeFormatter: function (sSortType) {           
+
+        sortTypeFormatter: function (sSortType) {
             switch (sSortType) {
                 case SORT_NONE: {
                     return "sort";
                 }
                 case SORT_ASC: {
-                    return "sort-ascending"; 
+                    return "sort-ascending";
                 }
                 case SORT_DESC: {
-					return "sort-descending";
+                    return "sort-descending";
                 }
                 default: {
                     return "sort";
@@ -153,7 +153,7 @@ sap.ui.define([
 
         onSortButtonPress: function (oEvent) {
             const oViewModel = this.getView().getModel("appView");
-            const oSortSettings  = oViewModel.getProperty("/sort");
+            const oSortSettings = oViewModel.getProperty("/sort");
             const sColumnName = oEvent.getSource().getCustomData()[0].getValue();
             const oCurrentSortSetting = oSortSettings[sColumnName];
 
@@ -183,16 +183,16 @@ sap.ui.define([
             const oProductsTable = this.byId("productsTableId");
 
             let oSorter = null;
-            
-            if(oCurrentSortSetting.sortType !== SORT_NONE) {
+
+            if (oCurrentSortSetting.sortType !== SORT_NONE) {
                 oSorter = new Sorter(sColumnName, oCurrentSortSetting.sortType === SORT_DESC);
             }
-            
+
             const oItemsBinding = oProductsTable.getBinding("items");
             oItemsBinding.sort(oSorter);
         },
-        
-        resetSortButtons: function(sExcludedColumnName) {
+
+        resetSortButtons: function (sExcludedColumnName) {
             const oViewModel = this.getView().getModel("appView");
             const aSortSettings = oViewModel.getProperty("/sort");
 
@@ -201,7 +201,7 @@ sap.ui.define([
                     aSortSettings[sColumnName].sortType = SORT_NONE;
                 }
             }
-        
+
             oViewModel.setProperty("/sort", aSortSettings);
         },
 
@@ -238,51 +238,51 @@ sap.ui.define([
 
             const aFilters = [];
 
-            if(oFilterSetings.selectedStatus !== "ALL") {
+            if (oFilterSetings.selectedStatus !== "ALL") {
                 aFilters.push(
                     new Filter({
-                        path: "Status", 
+                        path: "Status",
                         operator: FilterOperator.EQ,
                         value1: oFilterSetings.selectedStatus
                     })
-                );    
+                );
             }
 
             aFilters.push(
                 new Filter({
                     filters: [
                         new Filter({
-                            path: "Name", 
+                            path: "Name",
                             operator: FilterOperator.Contains,
                             value1: oFilterSetings.searchValue
                         }),
                         new Filter({
-                            path: "Price", 
+                            path: "Price",
                             operator: FilterOperator.EQ,
                             value1: !isNaN(oFilterSetings.searchValue) ? oFilterSetings.searchValue : null
                         }),
                         new Filter({
-                            path: "Specs", 
+                            path: "Specs",
                             operator: FilterOperator.Contains,
                             value1: oFilterSetings.searchValue
                         }),
                         new Filter({
-                            path: "Rating", 
+                            path: "Rating",
                             operator: FilterOperator.EQ,
                             value1: !isNaN(oFilterSetings.searchValue) ? oFilterSetings.searchValue : null
                         }),
                         new Filter({
-                            path: "SupplierInfo", 
+                            path: "SupplierInfo",
                             operator: FilterOperator.Contains,
                             value1: oFilterSetings.searchValue
                         }),
                         new Filter({
-                            path: "MadeIn", 
+                            path: "MadeIn",
                             operator: FilterOperator.Contains,
                             value1: oFilterSetings.searchValue
                         }),
                         new Filter({
-                            path: "ProductionCompanyName", 
+                            path: "ProductionCompanyName",
                             operator: FilterOperator.Contains,
                             value1: oFilterSetings.searchValue
                         }),
@@ -294,7 +294,7 @@ sap.ui.define([
             oItemsBinding.filter(aFilters);
         },
 
-        onCreateProductPress: function() {
+        onCreateProductPress: function () {
             const oView = this.getView();
 
             if (!this.oCreateProductDialog) {
@@ -307,15 +307,15 @@ sap.ui.define([
                 oView.addDependent(this.oCreateProductDialog);
 
                 const oMM = Core.getMessageManager();
-				
-				oMM.registerObject(oView.byId("createProductName"), true);
-				oMM.registerObject(oView.byId("createProductPrice"), true);
-				oMM.registerObject(oView.byId("createProductSpecs"), true);
-				oMM.registerObject(oView.byId("createProductRating"), true);
-				oMM.registerObject(oView.byId("createProductSupplierInfo"), true);
-				oMM.registerObject(oView.byId("createProductMadeIn"), true);
-				oMM.registerObject(oView.byId("createProductProdCompany"), true);
-                
+
+                oMM.registerObject(oView.byId("createProductName"), true);
+                oMM.registerObject(oView.byId("createProductPrice"), true);
+                oMM.registerObject(oView.byId("createProductSpecs"), true);
+                oMM.registerObject(oView.byId("createProductRating"), true);
+                oMM.registerObject(oView.byId("createProductSupplierInfo"), true);
+                oMM.registerObject(oView.byId("createProductMadeIn"), true);
+                oMM.registerObject(oView.byId("createProductProdCompany"), true);
+
                 this.oCreateProductDialog.bindObject({
                     path: "/formFields",
                     model: "createProductModel"
@@ -330,40 +330,40 @@ sap.ui.define([
             const oBundle = oView.getModel("i18n").getResourceBundle();
 
             const aInputs = [
-				this.byId("createProductName"),
-				this.byId("createProductPrice"),
-				this.byId("createProductSpecs"),
-				this.byId("createProductRating"),
-				this.byId("createProductSupplierInfo"),
-				this.byId("createProductMadeIn"),
+                this.byId("createProductName"),
+                this.byId("createProductPrice"),
+                this.byId("createProductSpecs"),
+                this.byId("createProductRating"),
+                this.byId("createProductSupplierInfo"),
+                this.byId("createProductMadeIn"),
                 this.byId("createProductProdCompany")
-			];
+            ];
 
             let bValidationError = false;
 
             aInputs.forEach(function (oInput) {
-				bValidationError = this._validateInput(oInput) || bValidationError;
-			}, this);
+                bValidationError = this._validateInput(oInput) || bValidationError;
+            }, this);
 
             if (!bValidationError) {
                 const oViewModel = oView.getModel("appView");
                 const oFormModel = oView.getModel("createProductModel");
                 const mFormFields = oFormModel.getProperty("/formFields");
                 const oDataModel = oView.getModel("odata");
-                
+
                 const payload = JSON.parse(JSON.stringify(mFormFields));
-    
+
                 payload["StoreId"] = oViewModel.getProperty("/storeID");
-                
+
                 oDataModel.create("/Products", payload);
                 this.oCreateProductDialog.close();
 
                 const sProductCreateNotification = oBundle.getText("productCreateNotification");
-				MessageToast.show(sProductCreateNotification);
-			} else {
+                MessageToast.show(sProductCreateNotification);
+            } else {
                 const sValidationAlert = oBundle.getText("validationAlert");
-				MessageBox.alert(sValidationAlert);
-			}
+                MessageBox.alert(sValidationAlert);
+            }
         },
 
         onCancelCreateProductPress: function () {
@@ -371,26 +371,26 @@ sap.ui.define([
         },
 
         _validateInput: function (oInput) {
-			let sValueState = "None";
-			let bValidationError = false;
-			const oBinding = oInput.getBinding("value");
+            let sValueState = "None";
+            let bValidationError = false;
+            const oBinding = oInput.getBinding("value");
 
-			try {
-				oBinding.getType().validateValue(oInput.getValue());
-			} catch (oException) {
-				sValueState = "Error";
-				bValidationError = true;
-			}
+            try {
+                oBinding.getType().validateValue(oInput.getValue());
+            } catch (oException) {
+                sValueState = "Error";
+                bValidationError = true;
+            }
 
-			oInput.setValueState(sValueState);
+            oInput.setValueState(sValueState);
 
-			return bValidationError;
-		},
+            return bValidationError;
+        },
 
-		onFormFieldChange: function(oEvent) {
-			var oInput = oEvent.getSource();
-			this._validateInput(oInput);
-		},
+        onFormFieldChange: function (oEvent) {
+            var oInput = oEvent.getSource();
+            this._validateInput(oInput);
+        },
 
         onAfterCloseCreateDialog: function () {
             const oFormModel = this.getView().getModel("createProductModel");
@@ -417,7 +417,7 @@ sap.ui.define([
                     "yahor.andryieuski.view.fragments.ConfirmDeleteProductDialog",
                     this
                 );
-                
+
                 oView.addDependent(this.oDeleteProductDialog);
             }
             oViewModel.setProperty("/pathDeleteProduct", sPath);
@@ -430,7 +430,7 @@ sap.ui.define([
             const sPath = oViewModel.getProperty("/pathDeleteProduct");
 
             this.getView().getModel("odata").remove(sPath);
-            
+
             this.oDeleteProductDialog.close();
         },
 
@@ -448,7 +448,7 @@ sap.ui.define([
                     "yahor.andryieuski.view.fragments.ConfirmDeleteStoreDialog",
                     this
                 );
-                
+
                 oView.addDependent(this.oDeleteStoreDialog);
             }
 
@@ -459,10 +459,10 @@ sap.ui.define([
             const sPath = this.getView().getBindingContext("odata").getPath();
 
             this.getView().getModel("odata").remove(sPath);
-  
+
             this.oDeleteStoreDialog.close();
 
-            this.oRouter.navTo("StoresOverview");              
+            this.oRouter.navTo("StoresOverview");
         },
     });
 });
