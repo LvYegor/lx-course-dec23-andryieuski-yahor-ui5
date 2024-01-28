@@ -145,12 +145,11 @@ sap.ui.define([
          * Validates the input value of a control.
          * Sets the value state of the control based on the validation result.
          *
-         * @private
          * @function
          * @name yahor.andryieuski.controller.StoresOverview#_validateInput
          * @memberof yahor.andryieuski.controller.StoresOverview
          * @param {sap.ui.core.Control} oInput - The input control to be validated.
-         * @public
+         * @private
          * @returns {boolean} Indicates whether a validation error occurred.
          */
         _validateInput: function (oInput) {
