@@ -14,28 +14,35 @@
                 <f:heading>
                     <Title text="{i18n>storesList}" wrapping="true"/>
                 </f:heading>
+                <f:actions>
+                    <Button
+                        text="{i18n>switchLanguage}"
+                        type="Emphasized"
+                        press="onSwitchLanguagePress"
+                    />
+                </f:actions>
             </f:DynamicPageTitle>
         </f:title>
 
         <f:header>
             <f:DynamicPageHeader pinnable="true">
                 <Toolbar style="Clear">
-                    <SearchField search="onStoresSearch" width="100%" showRefreshButton="true"/>
+                    <SearchField search="onStoresSearch" placeholder="{i18n>storeInputPlaceholder}" width="100%" showRefreshButton="true"/>
                 </Toolbar>
             </f:DynamicPageHeader>
         </f:header>
 
         <f:content>
-            <List items="{odata>/Stores}" id="storesListId">
+            <List items="{/Stores}" id="storesListId">
                 <items>
                     <ObjectListItem
-                        title="{odata>Name}"
+                        title="{Name}"
                         type="Active"
                         press="onStoresListItemPress"
-                        number="{odata>FloorArea}"
+                        number="{FloorArea}"
                         numberUnit="{i18n>areaUnit}">
                         <attributes>
-                            <ObjectAttribute text="{odata>Address}"/>
+                            <ObjectAttribute text="{Address}"/>
                         </attributes>
                     </ObjectListItem>
                 </items>

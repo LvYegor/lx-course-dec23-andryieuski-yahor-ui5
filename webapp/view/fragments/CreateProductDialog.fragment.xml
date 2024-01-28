@@ -1,11 +1,10 @@
 <core:FragmentDefinition
     xmlns="sap.m"
     xmlns:form="sap.ui.layout.form"
-    xmlns:core="sap.ui.core"
-    xmlns:l="sap.ui.layout">
+    xmlns:core="sap.ui.core">
     <Dialog
-        title="{i18n>createNewProduct}"
-        afterClose="onAfterCloseCreateDialog">
+        title="{= ${appView>/editMode} ? ${i18n>editProduct} : ${i18n>createNewProduct} }"
+        afterClose="onAfterCloseProductDialog">
         <form:SimpleForm id="createProductForm">
             <form:content>
                 <Label text="{i18n>name}"/>
@@ -14,7 +13,7 @@
                     required="true"
                     placeholder="{i18n>enterName}"
                     value="{
-                        path : 'createProductModel>Name',
+                        path : 'Name',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -30,7 +29,7 @@
                         required="true"
                         placeholder="{i18n>enterPrice}"
                         value="{
-                            path : 'createProductModel>Price',
+                            path : 'Price',
                             type : 'sap.ui.model.type.Integer',
                             constraints: {
                                 minimum: 1
@@ -48,7 +47,7 @@
                     rows="3"
                     placeholder="{i18n>enterSpecs}"
                     value="{
-                        path : 'createProductModel>Specs',
+                        path : 'Specs',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -63,7 +62,7 @@
                     required="true"
                     placeholder="{i18n>enterRating}"
                     value="{
-                        path : 'createProductModel>Rating',
+                        path : 'Rating',
                         type : 'sap.ui.model.type.Integer',
                         constraints: {
                             minimum: 1,
@@ -80,7 +79,7 @@
                     rows="3"
                     placeholder="{i18n>enterSupplierInfo}"
                     value="{
-                        path : 'createProductModel>SupplierInfo',
+                        path : 'SupplierInfo',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -95,7 +94,7 @@
                     required="true"
                     placeholder="{i18n>enterMadeIn}"
                     value="{
-                        path : 'createProductModel>MadeIn',
+                        path : 'MadeIn',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -110,7 +109,7 @@
                     required="true"
                     placeholder="{i18n>enterProdCompany}"
                     value="{
-                        path : 'createProductModel>ProductionCompanyName',
+                        path : 'ProductionCompanyName',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -120,16 +119,16 @@
                 />
 
                 <Label text="{i18n>status}" required="true"/>
-                <Select selectedKey="{createProductModel>Status}" id="createProductStatus">
-                    <core:Item text="{i18n>okStatus}" key="OK"/>
-                    <core:Item text="{i18n>storageStatus}" key="STORAGE"/>
-                    <core:Item text="{i18n>outOfStockStatus}" key="OUT_OF_STOCK"/>
+                <Select selectedKey="{Status}" id="createProductStatus">
+                    <core:Item text="{i18n>OK}" key="OK"/>
+                    <core:Item text="{i18n>STORAGE}" key="STORAGE"/>
+                    <core:Item text="{i18n>OUT_OF_STOCK}" key="OUT_OF_STOCK"/>
                 </Select>
             </form:content>
         </form:SimpleForm>
 
         <buttons>
-            <Button text="{i18n>create}" press="onSubmitCreateProductPress"/>
+            <Button text="{= ${appView>/editMode} ? ${i18n>edit} : ${i18n>create} }" press="onSubmitCreateProductPress"/>
             <Button text="{i18n>close}" press="onCancelCreateProductPress"/>
         </buttons>
     </Dialog>

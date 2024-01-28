@@ -3,8 +3,9 @@
     xmlns:f="sap.f"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:core="sap.ui.core"
-    xmlns:l="sap.ui.layout"
     xmlns:form="sap.ui.layout.form"
+    xmlns:tnt="sap.tnt"
+    core:require="{ formatMessage: 'sap/base/strings/formatMessage' }"
     controllerName="yahor.andryieuski.controller.ProductDetails">
     <f:DynamicPage id="productDetailsPageId" class="sapUiNoContentPadding" showFooter="true">
         <f:title>
@@ -21,52 +22,81 @@
                     <Title
                         text="{
                             parts: [
-                                'i18n>productDetails',
-                                'odata>Name'
+                                'i18n>productDetailsTitle',
+                                'Name'
                             ],
-                            formatter: '.formatTitle'
+                            formatter: 'formatMessage'
                         }"
                     />
                 </f:heading>
+
+                <f:actions>
+                    <Button
+                        text="{i18n>switchLanguage}"
+                        type="Emphasized"
+                        press="onSwitchLanguagePress"
+                    />
+                </f:actions>
             </f:DynamicPageTitle>
         </f:title>
 
         <f:header>
             <f:DynamicPageHeader pinnable="true">
-                <l:HorizontalLayout allowWrapping="true">
-                    <l:VerticalLayout class="sapUiMediumMarginEnd">
-                        <ObjectAttribute title="{i18n>price}" text="{odata>Price} {i18n>currency}"/>
-                        <ObjectAttribute title="{i18n>rating}" text="{odata>Rating}"/>
-                    </l:VerticalLayout>
-
-                    <l:VerticalLayout class="sapUiMediumMarginEnd">
-                        <ObjectAttribute title="{i18n>madeIn}" text="{odata>MadeIn}"/>
-                        <ObjectAttribute title="{i18n>prodCompany}" text="{odata>ProductionCompanyName}"/>
-                    </l:VerticalLayout>
-
-                    <l:VerticalLayout class="sapUiMediumMarginEnd">
-                        <ObjectStatus
-                            id="productStatus"
-                            title="{i18n>status}"
-                            inverted="true"
-                            text="{path: 'odata>Status', formatter: '.removeUnderscore'}"
+                <form:SimpleForm
+                    editable="false"
+                    layout="ResponsiveGridLayout"
+                    labelSpanL="2"
+                    labelSpanM="3"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanL="5"
+                    emptySpanM="4"
+                    emptySpanS="0"
+                    columnsL="1"
+                    columnsM="1"
+                    singleContainerFullSize="false" >
+                    <form:content>
+                        <Label text="{i18n>price}" />
+                        <Text
+                            text="{
+                                parts: [
+                                    'i18n>detailCurrency',
+                                    'Price'
+                                ],
+                                formatter: 'formatMessage'
+                            }"
                         />
-                    </l:VerticalLayout>
-                </l:HorizontalLayout>
 
-                <l:HorizontalLayout allowWrapping="true" class="sapUiTinyMarginTop">
-                    <l:VerticalLayout class="sapUiMediumMarginEnd">
-                        <ObjectAttribute class="sapUiTinyMarginBottom" title="{i18n>specs}" text="{odata>Specs}"/>
-                        <ObjectAttribute title="{i18n>supplierInfo}" text="{odata>SupplierInfo}"/>
-                    </l:VerticalLayout>
-                </l:HorizontalLayout>
+                        <Label text="{i18n>rating}" />
+                        <Text text="{Rating}" />
+
+                        <Label text="{i18n>specs}" />
+                        <Text text="{Specs}" />
+
+                        <Label text="{i18n>supplierInfo}" />
+                        <Text text="{SupplierInfo}" />
+
+                        <Label text="{i18n>prodCompany}" />
+                        <Text text="{ProductionCompanyName}" />
+
+                        <Label text="{i18n>madeIn}" />
+                        <Text text="{MadeIn}" />
+
+                        <Label text="{i18n>status}" />
+                        <tnt:InfoLabel
+                            id="productStatus"
+                            text="{path: 'Status', formatter: '.formatStatus'}"
+                            renderMode="Loose"
+                        />
+                    </form:content>
+                </form:SimpleForm>
             </f:DynamicPageHeader>
         </f:header>
 
         <f:content>
             <VBox>
                 <HBox alignItems="Center" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
-                    <Label text="{i18n>authorName}:" class="sapUiSmallMarginEnd"/>
+                    <Label text="{i18n>authorName}" showColon="true" class="sapUiSmallMarginEnd"/>
                     <Input
                         id="feedAuthor"
                         placeholder="{i18n>authorNamePlaceholder}"
@@ -79,7 +109,7 @@
                         }"
                     />
 
-                    <Label text="{i18n>rating}: " class="sapUiSmallMarginBeginEnd"/>
+                    <Label text="{i18n>rating}" showColon="true" class="sapUiSmallMarginBeginEnd"/>
                     <RatingIndicator
                         id="feedRating"
                         maxValue="5"
@@ -95,7 +125,7 @@
                     />
                 </HBox>
 
-                <FeedInput id="feedText" post="onFeedPost"/>
+                <FeedInput id="feedText" placeholder="{i18n>feedInputPlaceholder}" post="onFeedPost"/>
 
                 <List
                     showSeparators="Inner"
@@ -108,11 +138,20 @@
                     }">
                     <FeedListItem
                         sender="{appView>Author}"
-                        info="{i18n>rating}: {appView>Rating}"
-                        timestamp="{i18n>posted}: {
-                            path: 'appView>Posted',
-                            type: 'sap.ui.model.type.Date',
-                            formatOptions: {style: 'medium'}
+                        info="{
+                            parts: [
+                                'i18n>detailRating',
+                                'appView>Rating'
+                            ],
+                            formatter: 'formatMessage'
+                        }"
+
+                        timestamp="{
+                            parts: [
+                                { path: 'i18n>detailPostedDate' },
+                                { path: 'appView>Posted', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium'} }
+                            ],
+                            formatter: 'formatMessage'
                         }"
                         text="{appView>Message}"
                         convertLinksToAnchorTags="All"

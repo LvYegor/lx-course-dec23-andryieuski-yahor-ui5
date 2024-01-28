@@ -3,13 +3,13 @@
     xmlns="sap.m"
     controllerName="yahor.andryieuski.controller.NotFound">
     <MessagePage
-        title="Not Found"
-        text="The requested resource was not found"
+        title="{i18n>notFoundTitle}"
+        text="{i18n>notFoundText}"
         icon="{sap-icon://document}"
-        id="page"
+        id="notFoundPage"
         description="">
         <customDescription>
-            <Link text="Go to stores list page" press="onLinkPress"/>
+            <Link text="{i18n>notFoundLinkText}" press="onLinkPress"/>
         </customDescription>
     </MessagePage>
 </mvc:View>

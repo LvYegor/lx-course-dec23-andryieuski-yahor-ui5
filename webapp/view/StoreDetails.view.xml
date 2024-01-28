@@ -2,9 +2,9 @@
     xmlns="sap.m"
     xmlns:f="sap.f"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns:l="sap.ui.layout"
     xmlns:form="sap.ui.layout.form"
     xmlns:core="sap.ui.core"
+    core:require="{ formatMessage: 'sap/base/strings/formatMessage' }"
     controllerName="yahor.andryieuski.controller.StoreDetails">
     <f:DynamicPage id="storeDetailsPageId" class="sapUiNoContentPadding" showFooter="true">
         <f:title>
@@ -19,32 +19,61 @@
                 <f:heading>
                     <Title text="{i18n>storeDetails}" wrapping="true"/>
                 </f:heading>
+
+                <f:actions>
+                    <Button
+                        text="{i18n>switchLanguage}"
+                        type="Emphasized"
+                        press="onSwitchLanguagePress"
+                    />
+                </f:actions>
             </f:DynamicPageTitle>
         </f:title>
 
         <f:header>
             <f:DynamicPageHeader pinnable="true">
-                <l:HorizontalLayout allowWrapping="true">
-                    <l:VerticalLayout class="sapUiMediumMarginEnd">
-                        <ObjectAttribute title="{i18n>email}" text="{odata>Email}"/>
-                        <ObjectAttribute title="{i18n>phoneNumber}" text="{odata>PhoneNumber}"/>
-                        <ObjectAttribute title="{i18n>address}" text="{odata>Address}"/>
-                    </l:VerticalLayout>
+                <form:SimpleForm
+                    editable="false"
+                    layout="ResponsiveGridLayout"
+                    labelSpanL="2"
+                    labelSpanM="3"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanL="5"
+                    emptySpanM="4"
+                    emptySpanS="0"
+                    columnsL="1"
+                    columnsM="1"
+                    singleContainerFullSize="false" >
+                    <form:content>
+                        <Label text="{i18n>email}" />
+                        <Text text="{Email}" />
 
-                    <l:VerticalLayout>
-                        <ObjectAttribute
-                            title="{i18n>establishedDate}"
-                            text="{
-                                path: 'odata>Established',
-                                type: 'sap.ui.model.type.Date',
-                                formatOptions: {
-                                    style: 'medium'
-                                }
-                            }"
-                        />
-                        <ObjectAttribute title="{i18n>floorArea}" text="{odata>FloorArea} "/>
-                    </l:VerticalLayout>
-                </l:HorizontalLayout>
+                        <Label text="{i18n>phoneNumber}" />
+                        <Text text="{PhoneNumber}" />
+
+                        <Label text="{i18n>address}" />
+                        <Text text="{Address}" />
+
+                        <Label text="{i18n>establishedDate}" />
+                        <Text text="{
+                            path: 'Established',
+                            type: 'sap.ui.model.type.Date',
+                            formatOptions: {
+                                style: 'medium'
+                            }
+                        }" />
+
+                        <Label text="{i18n>floorArea}" />
+                        <Text text="{
+                            parts: [
+                                'i18n>detailAreaUnit',
+                                'FloorArea'
+                            ],
+                            formatter: 'formatMessage'
+                        }" />
+                    </form:content>
+                </form:SimpleForm>
             </f:DynamicPageHeader>
         </f:header>
 
@@ -63,21 +92,21 @@
                         icon="sap-icon://message-success"
                         iconColor="Positive"
                         count="{appView>/statusAmount/ok}"
-                        text="{i18n>okStatus}"
+                        text="{i18n>OK}"
                     />
                     <IconTabFilter
                         key="STORAGE"
                         icon="sap-icon://message-warning"
                         iconColor="Critical"
                         count="{appView>/statusAmount/storage}"
-                        text="{i18n>storageStatus}"
+                        text="{i18n>STORAGE}"
                     />
                     <IconTabFilter
                         key="OUT_OF_STOCK"
                         icon="sap-icon://message-error"
                         iconColor="Negative"
                         count="{appView>/statusAmount/out_of_stock}"
-                        text="{i18n>outOfStockStatus}"
+                        text="{i18n>OUT_OF_STOCK}"
                     />
                 </items>
                 <content>
@@ -86,7 +115,7 @@
                         id="productsTableId"
                         sticky="HeaderToolbar,ColumnHeaders"
                         width="auto"
-                        items="{odata>rel_Products}">
+                        items="{rel_Products}">
                         <headerToolbar>
                             <Toolbar>
                                 <Title text="{i18n>products}"/>
@@ -98,8 +127,9 @@
                                 </SearchField>
                             </Toolbar>
                         </headerToolbar>
+
                         <columns>
-                            <Column width="10%">
+                            <Column minScreenWidth="675px" demandPopin="true">
                                 <HBox alignItems="Center">
                                     <Button
                                         type="Transparent"
@@ -115,7 +145,7 @@
                                     <Text text="{i18n>name}"/>
                                 </HBox>
                             </Column>
-                            <Column hAlign="End">
+                            <Column hAlign="End" minScreenWidth="675px" demandPopin="true">
                                 <HBox alignItems="Center">
                                     <Button
                                         type="Transparent"
@@ -131,7 +161,7 @@
                                     <Text text="{i18n>price}"/>
                                 </HBox>
                             </Column>
-                            <Column>
+                            <Column minScreenWidth="675px" demandPopin="true">
                                 <HBox alignItems="Center">
                                     <Button
                                         type="Transparent"
@@ -147,7 +177,7 @@
                                     <Text text="{i18n>specs}"/>
                                 </HBox>
                             </Column>
-                            <Column>
+                            <Column minScreenWidth="835px" demandPopin="true">
                                 <HBox alignItems="Center">
                                     <Button
                                         type="Transparent"
@@ -163,7 +193,7 @@
                                     <Text text="{i18n>supplierInfo}"/>
                                 </HBox>
                             </Column>
-                            <Column>
+                            <Column minScreenWidth="990px" demandPopin="true">
                                 <HBox alignItems="Center">
                                     <Button
                                         type="Transparent"
@@ -179,7 +209,7 @@
                                     <Text text="{i18n>madeIn}"/>
                                 </HBox>
                             </Column>
-                            <Column>
+                            <Column minScreenWidth="1140px" demandPopin="true">
                                 <HBox alignItems="Center">
                                     <Button
                                         type="Transparent"
@@ -195,7 +225,7 @@
                                     <Text text="{i18n>prodCompany}"/>
                                 </HBox>
                             </Column>
-                            <Column width="15%">
+                            <Column minScreenWidth="1350px" demandPopin="true">
                                 <HBox alignItems="Center">
                                     <Button
                                         type="Transparent"
@@ -214,17 +244,18 @@
                             <Column>
                             </Column>
                         </columns>
+
                         <items>
                             <ColumnListItem type="Navigation" press="onProductItemPress">
                                 <cells>
-                                    <ObjectIdentifier title="{odata>Name}"/>
-                                    <ObjectNumber number="{odata>Price}" unit="{i18n>currency}"/>
-                                    <Text text="{odata>Specs}" wrapping="false"/>
-                                    <Text text="{odata>SupplierInfo}" wrapping="false"/>
-                                    <Text text="{odata>MadeIn}" wrapping="false"/>
-                                    <Text text="{odata>ProductionCompanyName}" wrapping="false"/>
-                                    <RatingIndicator editable="false" maxValue="5" value="{odata>Rating}"/>
-                                    <HBox>
+                                    <ObjectIdentifier title="{Name}"/>
+                                    <ObjectNumber number="{Price}" unit="{i18n>currency}"/>
+                                    <Text text="{Specs}" wrapping="false"/>
+                                    <Text text="{SupplierInfo}" wrapping="false"/>
+                                    <Text text="{MadeIn}" wrapping="false"/>
+                                    <Text text="{ProductionCompanyName}" wrapping="false"/>
+                                    <RatingIndicator editable="false" maxValue="5" value="{Rating}"/>
+                                    <HBox justifyContent="End">
                                         <Button icon="sap-icon://edit" type="Transparent" press="onEditProductPress"/>
                                         <Button icon="sap-icon://sys-cancel" type="Transparent" press="onDeleteProductPress"/>
                                     </HBox>
