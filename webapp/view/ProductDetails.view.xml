@@ -1,0 +1,163 @@
+<mvc:View
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:tnt="sap.tnt"
+    core:require="{ formatMessage: 'sap/base/strings/formatMessage' }"
+    controllerName="yahor.andryieuski.controller.ProductDetails">
+    <f:DynamicPage id="productDetailsPageId" class="sapUiNoContentPadding" showFooter="true">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:breadcrumbs>
+                    <Breadcrumbs>
+                        <Link press="onStoresListBreadcrumbPress" text="{i18n>storesList}"/>
+                        <Link press="onStoreDetailsBreadcrumbPress" text="{i18n>storeDetails}"/>
+                        <Link text="{i18n>productDetails}"/>
+                    </Breadcrumbs>
+                </f:breadcrumbs>
+
+                <f:heading>
+                    <Title
+                        text="{
+                            parts: [
+                                'i18n>productDetailsTitle',
+                                'Name'
+                            ],
+                            formatter: 'formatMessage'
+                        }"
+                    />
+                </f:heading>
+
+                <f:actions>
+                    <Button
+                        text="{i18n>switchLanguage}"
+                        type="Emphasized"
+                        press="onSwitchLanguagePress"
+                    />
+                </f:actions>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <form:SimpleForm
+                    editable="false"
+                    layout="ResponsiveGridLayout"
+                    labelSpanL="2"
+                    labelSpanM="3"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanL="5"
+                    emptySpanM="4"
+                    emptySpanS="0"
+                    columnsL="1"
+                    columnsM="1"
+                    singleContainerFullSize="false" >
+                    <form:content>
+                        <Label text="{i18n>price}" />
+                        <Text
+                            text="{
+                                parts: [
+                                    'i18n>detailCurrency',
+                                    'Price'
+                                ],
+                                formatter: 'formatMessage'
+                            }"
+                        />
+
+                        <Label text="{i18n>rating}" />
+                        <Text text="{Rating}" />
+
+                        <Label text="{i18n>specs}" />
+                        <Text text="{Specs}" />
+
+                        <Label text="{i18n>supplierInfo}" />
+                        <Text text="{SupplierInfo}" />
+
+                        <Label text="{i18n>prodCompany}" />
+                        <Text text="{ProductionCompanyName}" />
+
+                        <Label text="{i18n>madeIn}" />
+                        <Text text="{MadeIn}" />
+
+                        <Label text="{i18n>status}" />
+                        <tnt:InfoLabel
+                            id="productStatus"
+                            text="{path: 'Status', formatter: '.formatStatus'}"
+                            renderMode="Loose"
+                        />
+                    </form:content>
+                </form:SimpleForm>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <VBox>
+                <HBox alignItems="Center" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>authorName}" showColon="true" class="sapUiSmallMarginEnd"/>
+                    <Input
+                        id="feedAuthor"
+                        placeholder="{i18n>authorNamePlaceholder}"
+                        value="{
+                            path : 'feedModel>/Author',
+                            type : 'sap.ui.model.type.String',
+                            constraints : {
+                                minLength: 1
+                            }
+                        }"
+                    />
+
+                    <Label text="{i18n>rating}" showColon="true" class="sapUiSmallMarginBeginEnd"/>
+                    <RatingIndicator
+                        id="feedRating"
+                        maxValue="5"
+                        editable="true"
+                        value="{
+                            path : 'feedModel>/Rating',
+                            type : 'sap.ui.model.type.Float',
+                            constraints : {
+                                minimum: 1,
+                                maximum: 5
+                            }
+                        }"
+                    />
+                </HBox>
+
+                <FeedInput id="feedText" placeholder="{i18n>feedInputPlaceholder}" post="onFeedPost"/>
+
+                <List
+                    showSeparators="Inner"
+                    items="{
+                        path: 'appView>/ProductComments',
+                        sorter: {
+                            path: 'Posted',
+                            descending: true
+                        }
+                    }">
+                    <FeedListItem
+                        sender="{appView>Author}"
+                        info="{
+                            parts: [
+                                'i18n>detailRating',
+                                'appView>Rating'
+                            ],
+                            formatter: 'formatMessage'
+                        }"
+
+                        timestamp="{
+                            parts: [
+                                { path: 'i18n>detailPostedDate' },
+                                { path: 'appView>Posted', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium'} }
+                            ],
+                            formatter: 'formatMessage'
+                        }"
+                        text="{appView>Message}"
+                        convertLinksToAnchorTags="All"
+                    />
+                </List>
+            </VBox>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>

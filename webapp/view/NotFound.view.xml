@@ -1,0 +1,15 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    controllerName="yahor.andryieuski.controller.NotFound">
+    <MessagePage
+        title="{i18n>notFoundTitle}"
+        text="{i18n>notFoundText}"
+        icon="{sap-icon://document}"
+        id="notFoundPage"
+        description="">
+        <customDescription>
+            <Link text="{i18n>notFoundLinkText}" press="onLinkPress"/>
+        </customDescription>
+    </MessagePage>
+</mvc:View>

@@ -1,0 +1,16 @@
+{
+  "source": {
+    "include": [
+      "webapp/controller/NotFound.controller.js",
+      "webapp/controller/ProductDetails.controller.js",
+      "webapp/controller/StoreDetails.controller.js",
+      "webapp/controller/StoresOverview.controller.js",
+      "webapp/utils/customDataTypes/CustomEmailType.js",
+      "webapp/Component.js"
+    ],
+    "exclude": ["node_modules", "test"]
+  },
+  "opts": {
+    "destination": "./docs"
+  }
+}
