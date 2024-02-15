@@ -174,7 +174,7 @@ sap.ui.define([
          *
          * @function
          * @name yahor.andryieuski.controller.StoresOverview#validateDateInputPresence
-         * @memberof yahor.andryieuski.controller.YourControllerName
+         * @memberof yahor.andryieuski.controller.StoresOverview
          * @param {sap.m.Input} oInput - The input field to validate.
          * @public
          * @returns {boolean} True if there is a validation error, false otherwise.
