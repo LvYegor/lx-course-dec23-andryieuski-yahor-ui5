@@ -6,6 +6,7 @@
  */
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "yahor/andryieuski/model/StoresModel",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/ui/model/json/JSONModel",
@@ -17,7 +18,7 @@ sap.ui.define([
     "sap/ui/core/Fragment",
     "sap/ui/core/Messaging",
     "sap/base/i18n/Localization"
-], function (Controller, Filter, FilterOperator, JSONModel, SimpleType, ValidateException, MessageBox, MessageToast, DateFormat, Fragment, Messaging, Localization) {
+], function (Controller, StoresModel, Filter, FilterOperator, JSONModel, SimpleType, ValidateException, MessageBox, MessageToast, DateFormat, Fragment, Messaging, Localization) {
     "use strict";
 
     return Controller.extend("yahor.andryieuski.controller.StoresOverview", {
@@ -35,6 +36,16 @@ sap.ui.define([
          */
         onInit: function () {
             this.oRouter = this.getOwnerComponent().getRouter();
+
+            // const oStoresModel = new JSONModel();
+            // this.getView().setModel(oStoresModel, "storesModel");
+
+            StoresModel.fetchStores().then((aStores) => {
+                this.getView().getModel("storesModel").setData({
+                    "Stores": aStores
+                });
+
+            });
         },
 
         /**
@@ -49,7 +60,7 @@ sap.ui.define([
          * @returns {void}
          */
         onStoresListItemPress: function (oEvent) {
-            const oContext = oEvent.getSource().getBindingContext();
+            const oContext = oEvent.getSource().getBindingContext("storesModel");
 
             this.oRouter.navTo("StoreDetails", {
                 storeID: oContext.getProperty("id")
@@ -71,6 +82,12 @@ sap.ui.define([
             const oStoresList = this.byId("storesListId");
             const oItemsBinding = oStoresList.getBinding("items");
             const sQuery = oEvent.getParameter("query");
+
+            // StoresModel.fetchFilteredStores(sQuery).then((aStores) => {
+            //     this.getView().getModel("storesModel").setData({
+            //         "Stores": aStores
+            //     });
+            // });
 
             const oFilter = new Filter({
                 filters: [
@@ -351,6 +368,6 @@ sap.ui.define([
             } else {
                 Localization.setLanguage("en");
             }
-        }
+        },
     });
 });

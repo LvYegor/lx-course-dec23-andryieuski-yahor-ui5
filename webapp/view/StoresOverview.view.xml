@@ -33,16 +33,16 @@
         </f:header>
 
         <f:content>
-            <List items="{/Stores}" id="storesListId">
+            <List items="{storesModel>/Stores}" id="storesListId">
                 <items>
                     <ObjectListItem
-                        title="{Name}"
+                        title="{storesModel>Name}"
                         type="Active"
                         press="onStoresListItemPress"
-                        number="{FloorArea}"
+                        number="{storesModel>FloorArea}"
                         numberUnit="{i18n>areaUnit}">
                         <attributes>
-                            <ObjectAttribute text="{Address}"/>
+                            <ObjectAttribute text="{storesModel>Address}"/>
                         </attributes>
                     </ObjectListItem>
                 </items>
