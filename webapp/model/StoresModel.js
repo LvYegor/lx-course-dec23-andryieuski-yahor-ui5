@@ -1,7 +1,7 @@
 sap.ui.define([], function() {
     "use strict";
 
-    const sHostURL = "http://localhost:3000/api/";
+    const sHostURL = "http://localhost:8000/api/";
 
     return {
 

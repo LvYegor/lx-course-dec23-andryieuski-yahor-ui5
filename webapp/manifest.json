@@ -103,15 +103,6 @@
 					"bundleName": "yahor.andryieuski.i18n.i18n"
 				}
 			},
-			"odata": {
-				"dataSource": "mainService",
-				"settings": {
-					"defaultBindingMode": "TwoWay",
-					"defaultCountMode": "InlineRepeat",
-					"useBatch": false,
-					"disableHeadRequestForToken": true
-				}
-			},
 			"storesModel": {
 				"type": "sap.ui.model.json.JSONModel"
 			}

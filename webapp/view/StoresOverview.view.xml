@@ -36,13 +36,13 @@
             <List items="{storesModel>/Stores}" id="storesListId">
                 <items>
                     <ObjectListItem
-                        title="{storesModel>Name}"
+                        title="{storesModel>name}"
                         type="Active"
                         press="onStoresListItemPress"
-                        number="{storesModel>FloorArea}"
+                        number="{storesModel>floor_area}"
                         numberUnit="{i18n>areaUnit}">
                         <attributes>
-                            <ObjectAttribute text="{storesModel>Address}"/>
+                            <ObjectAttribute text="{storesModel>address}"/>
                         </attributes>
                     </ObjectListItem>
                 </items>
