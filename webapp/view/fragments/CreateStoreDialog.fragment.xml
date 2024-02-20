@@ -14,7 +14,7 @@
                     required="true"
                     placeholder="{i18n>enterName}"
                     value="{
-                        path : 'Name',
+                        path : 'newStoreModel>name',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -29,7 +29,7 @@
                     required="true"
                     placeholder="{i18n>enterEmail}"
                     value="{
-                        path : 'Email',
+                        path : 'newStoreModel>email',
                         type : 'yahor.andryieuski.utils.customDataTypes.CustomEmailType'
                     }"
                     change=".onFormFieldChange"
@@ -41,7 +41,7 @@
                     required="true"
                     placeholder="{i18n>enterPhone}"
                     value="{
-                        path : 'PhoneNumber',
+                        path : 'newStoreModel>phone_number',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -56,7 +56,7 @@
                     required="true"
                     placeholder="{i18n>enterAddress}"
                     value="{
-                        path : 'Address',
+                        path : 'newStoreModel>address',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -71,7 +71,7 @@
                     required="true"
                     placeholder="{i18n>enterDate}"
                     value="{
-                        path : 'Established',
+                        path : 'newStoreModel>established',
                         type: 'sap.ui.model.type.Date'
                     }"
                     change=".onDateFieldChange"
@@ -83,7 +83,7 @@
                     required="true"
                     placeholder="{i18n>enterFloorArea}"
                     value="{
-                        path : 'FloorArea',
+                        path : 'newStoreModel>floor_area',
                         type : 'sap.ui.model.type.Integer',
                         constraints: {
                             minimum: 1

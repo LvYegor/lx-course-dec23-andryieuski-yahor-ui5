@@ -37,15 +37,23 @@ sap.ui.define([
         onInit: function () {
             this.oRouter = this.getOwnerComponent().getRouter();
 
-            // const oStoresModel = new JSONModel();
-            // this.getView().setModel(oStoresModel, "storesModel");
-
             StoresModel.fetchStores().then((aStores) => {
                 this.getView().getModel("storesModel").setData({
-                    "Stores": aStores
+                    Stores: aStores
                 });
 
             });
+
+            const oNewStoreModel = new JSONModel({
+                name: null,
+                email: null,
+                phone_number: null,
+                address: null,
+                established: null,
+                floor_area: null
+            });
+
+            this.getView().setModel(oNewStoreModel, "newStoreModel");
         },
 
         /**
@@ -79,38 +87,13 @@ sap.ui.define([
          * @returns {void}
          */
         onStoresSearch: function (oEvent) {
-            const oStoresList = this.byId("storesListId");
-            const oItemsBinding = oStoresList.getBinding("items");
             const sQuery = oEvent.getParameter("query");
 
-            // StoresModel.fetchFilteredStores(sQuery).then((aStores) => {
-            //     this.getView().getModel("storesModel").setData({
-            //         "Stores": aStores
-            //     });
-            // });
-
-            const oFilter = new Filter({
-                filters: [
-                    new Filter({
-                        path: "Name",
-                        operator: FilterOperator.Contains,
-                        value1: sQuery
-                    }),
-                    new Filter({
-                        path: "Address",
-                        operator: FilterOperator.Contains,
-                        value1: sQuery
-                    }),
-                    new Filter({
-                        path: "FloorArea",
-                        operator: FilterOperator.EQ,
-                        value1: !isNaN(sQuery) ? sQuery : null
-                    })
-                ],
-                and: false
+            StoresModel.fetchFilteredStores(sQuery).then((aStores) => {
+                this.getView().getModel("storesModel").setData({
+                    "Stores": aStores
+                });
             });
-
-            oItemsBinding.filter(oFilter);
         },
 
         /**
@@ -146,13 +129,10 @@ sap.ui.define([
             }
 
             this.pDialog.then(() => {
-                const oODataModel = oView.getModel();
-
-                const oEntryContext = oODataModel.createEntry("/Stores");
-
-                this.oDialog.setBindingContext(oEntryContext);
-
-                this.oDialog.setModel(oODataModel);
+                this.oDialog.bindObject({
+                    model: "newStoreModel",
+                    path: "/"
+                });
 
                 this.oDialog.open();
             });
@@ -236,7 +216,6 @@ sap.ui.define([
             aInputs.forEach(function (oInput) {
                 oInput.setValueState(sap.ui.core.ValueState.None);
             }, this);
-
         },
 
         /**
@@ -304,9 +283,16 @@ sap.ui.define([
             this.validateDateInputPresence(this.byId("createStoreDate"));
 
             if (!bValidationError) {
-                const oODataModel = oView.getModel();
+                const oStoresModel = oView.getModel("storesModel");
+                const oNewStoreModel = oView.getModel("newStoreModel");
+                const oFormFields = oNewStoreModel.getProperty("/");
 
-                oODataModel.submitChanges();
+                StoresModel.createNewStore(oFormFields);
+
+                const aStores = oStoresModel.getProperty("/Stores")
+                aStores.push(oFormFields);
+
+                oStoresModel.setProperty("/Stores", aStores);
 
                 this.oDialog.close();
 
@@ -343,11 +329,17 @@ sap.ui.define([
          * @returns {void}
          */
         onAfterCloseCreateDialog: function () {
-            const oODataModel = this.getView().getModel();
-            const oContext = this.oDialog.getBindingContext();
-
-            oODataModel.deleteCreatedEntry(oContext);
+            this.resetStoreDialogFields();
             this.resetValueStates();
+        },
+
+        resetStoreDialogFields: function () {
+            this.byId("createStoreName").setValue(null);
+            this.byId("createStoreEmail").setValue(null);
+            this.byId("createStorePhoneNumber").setValue(null);
+            this.byId("createStoreAddress").setValue(null);
+            this.byId("createStoreDate").setValue(null);
+            this.byId("createStoreFloorArea").setValue(null);
         },
 
         /**

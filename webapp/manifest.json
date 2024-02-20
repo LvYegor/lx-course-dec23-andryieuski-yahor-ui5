@@ -7,15 +7,6 @@
 		"description": "{{appDescription}}",
 		"applicationVersion": {
 			"version": "1.0.0"
-		},
-		"dataSources": {
-			"mainService": {
-				"uri": "http://localhost:3000/odata/",
-				"type": "OData",
-				"settings": {
-					"odataVersion": "2.0"
-				}
-			}
 		}
 	},
 	"sap.ui": {

@@ -10,7 +10,7 @@ sap.ui.define([], function() {
          * @returns {Promise} A promise that resolves with the response data or rejects with an error.
          */
         fetchStores: function () {
-            return fetch(sHostURL + "Stores")
+            return fetch(sHostURL + "stores")
                 .then(response => response.json())
                 .catch(console.error);
         },
@@ -21,19 +21,7 @@ sap.ui.define([], function() {
          * @returns {Promise} A promise that resolves with the response data or rejects with an error.
          */
         fetchFilteredStores: function (sFilterValue){
-            sFilterValue = !sFilterValue ? " " : sFilterValue;
-
-            const oFilter = {
-                "where": {
-                    "or": [
-                        {"Name": {"ilike": sFilterValue}},
-                        {"Address": {"ilike": sFilterValue}},
-                        {"FloorArea": sFilterValue}
-                    ]
-                }
-            };
-            const oQueryParams = new URLSearchParams({filter: JSON.stringify(oFilter)});
-            const sUrlWithParams = `${sHostURL}Stores?${oQueryParams.toString()}`;
+            const sUrlWithParams = `${sHostURL}stores/?search=${sFilterValue}`;
 
             return fetch(sUrlWithParams)
                 .then(response => response.json())
@@ -47,14 +35,16 @@ sap.ui.define([], function() {
          */
         createNewStore: function (data){
             const newStore = {
-                Name: data.Name.value,
-                Email: data.Email.value,
-                PhoneNumber: data.PhoneNumber.value,
-                Address: data.Address.value,
-                Established: data.Date.value,
-                FloorArea: data.FloorArea.value
+                name: data.name,
+                email: data.email,
+                phone_number: data.phone_number,
+                address: data.address,
+                // established: data.established,
+                established: "2024-01-01",
+                floor_area: data.floor_area
             };
-            return fetch(sHostURL + "Stores", {
+
+            return fetch(sHostURL + "stores/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json;charset=utf-8"
