@@ -15,6 +15,12 @@ sap.ui.define([], function() {
                 .catch(console.error);
         },
 
+        fetchStoreById: function (id) {
+            return fetch(sHostURL + `stores/${id}`)
+                .then(response => response.json())
+                .catch(console.error);
+        },
+
         /**
          * Fetch filtered stores based on the provided filter value.
          * @param {string} sFilterValue - The filter value for store names, addresses, or floor areas.
@@ -51,6 +57,12 @@ sap.ui.define([], function() {
                 },
                 body: JSON.stringify(newStore)
             }).catch(console.error);
+        },
+
+        fetchStoreProductsById: function (id) {
+            return fetch(sHostURL + `stores/${id}/products/`)
+                .then(response => response.json())
+                .catch(console.error);
         },
     };
 });

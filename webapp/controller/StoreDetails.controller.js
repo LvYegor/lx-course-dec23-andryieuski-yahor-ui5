@@ -7,6 +7,7 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
+    "yahor/andryieuski/model/StoresModel",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/ui/model/Sorter",
@@ -16,7 +17,7 @@ sap.ui.define([
     "sap/ui/core/Fragment",
     "sap/ui/core/Messaging",
     "sap/base/i18n/Localization"
-], function (Controller, JSONModel, Filter, FilterOperator, Sorter, Core, MessageBox, MessageToast, Fragment, Messaging, Localization) {
+], function (Controller, JSONModel, StoresModel, Filter, FilterOperator, Sorter, Core, MessageBox, MessageToast, Fragment, Messaging, Localization) {
     "use strict";
 
     const SORT_NONE = null;
@@ -108,18 +109,18 @@ sap.ui.define([
         onPatternMatched: function (oEvent) {
             const mRouteArguments = oEvent.getParameter("arguments");
             const sStoreID = mRouteArguments.storeID;
-            const oODataModel = this.getView().getModel();
+            // const oODataModel = this.getView().getModel();
             const oViewModel = this.getView().getModel("appView");
 
             oViewModel.setProperty("/storeID", sStoreID);
 
-            oODataModel.metadataLoaded().then(function () {
-                const sKey = oODataModel.createKey("/Stores", {id: sStoreID});
+            StoresModel.fetchStoreById(sStoreID).then((oStore) => {
+                this.getView().getModel("storesModel").setProperty("/DetailStore", oStore);
+            });
 
-                this.getView().bindObject({
-                    path: sKey
-                });
-            }.bind(this));
+            StoresModel.fetchStoreProductsById(sStoreID).then((aProducts) => {
+                this.getView().getModel("storesModel").setProperty("/StoreProducts", aProducts);
+            });
         },
 
         /**
@@ -140,20 +141,22 @@ sap.ui.define([
 
             const aStatuses = ["ALL", "OK", "STORAGE", "OUT_OF_STOCK"];
 
-            aStatuses.forEach(function (sStatus) {
-                const aFilters = [];
+            console.log(oKey);
 
-                if (sStatus !== "ALL") {
-                    aFilters.push(new Filter("Status", FilterOperator.EQ, sStatus));
-                }
-
-                this.getView().getModel().read(`${oKey}/rel_Products/$count`, {
-                    filters: aFilters,
-                    success: function (oData) {
-                        oViewModel.setProperty("/statusAmount/" + (sStatus === "ALL" ? "all" : sStatus.toLowerCase()), oData);
-                    }
-                });
-            }, this);
+            // aStatuses.forEach(function (sStatus) {
+            //     const aFilters = [];
+            //
+            //     if (sStatus !== "ALL") {
+            //         aFilters.push(new Filter("Status", FilterOperator.EQ, sStatus));
+            //     }
+            //
+            //     this.getView().getModel().read(`${oKey}/rel_Products/$count`, {
+            //         filters: aFilters,
+            //         success: function (oData) {
+            //             oViewModel.setProperty("/statusAmount/" + (sStatus === "ALL" ? "all" : sStatus.toLowerCase()), oData);
+            //         }
+            //     });
+            // }, this);
         },
 
         /**

@@ -38,10 +38,7 @@ sap.ui.define([
             this.oRouter = this.getOwnerComponent().getRouter();
 
             StoresModel.fetchStores().then((aStores) => {
-                this.getView().getModel("storesModel").setData({
-                    Stores: aStores
-                });
-
+                this.getView().getModel("storesModel").setProperty("/Stores", aStores);
             });
 
             const oNewStoreModel = new JSONModel({
@@ -289,10 +286,16 @@ sap.ui.define([
 
                 StoresModel.createNewStore(oFormFields);
 
-                const aStores = oStoresModel.getProperty("/Stores")
-                aStores.push(oFormFields);
+                // const aStores = oStoresModel.getProperty("/Stores")
+                // aStores.push(oFormFields);
+                //
+                // oStoresModel.setProperty("/Stores", aStores);
 
-                oStoresModel.setProperty("/Stores", aStores);
+                StoresModel.fetchStores().then((aStores) => {
+                    this.getView().getModel("storesModel").setData({
+                        Stores: aStores
+                    });
+                });
 
                 this.oDialog.close();
 

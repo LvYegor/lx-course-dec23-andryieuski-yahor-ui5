@@ -47,17 +47,17 @@
                     singleContainerFullSize="false" >
                     <form:content>
                         <Label text="{i18n>email}" />
-                        <Text text="{Email}" />
+                        <Text text="{storesModel>/DetailStore/email}" />
 
                         <Label text="{i18n>phoneNumber}" />
-                        <Text text="{PhoneNumber}" />
+                        <Text text="{storesModel>/DetailStore/phone_number}" />
 
                         <Label text="{i18n>address}" />
-                        <Text text="{Address}" />
+                        <Text text="{storesModel>/DetailStore/address}" />
 
                         <Label text="{i18n>establishedDate}" />
                         <Text text="{
-                            path: 'Established',
+                            path: 'storesModel>/DetailStore/established',
                             type: 'sap.ui.model.type.Date',
                             formatOptions: {
                                 style: 'medium'
@@ -68,7 +68,7 @@
                         <Text text="{
                             parts: [
                                 'i18n>detailAreaUnit',
-                                'FloorArea'
+                                'storesModel>/DetailStore/floor_area'
                             ],
                             formatter: 'formatMessage'
                         }" />
@@ -115,7 +115,7 @@
                         id="productsTableId"
                         sticky="HeaderToolbar,ColumnHeaders"
                         width="auto"
-                        items="{rel_Products}">
+                        items="{storesModel>/StoreProducts}">
                         <headerToolbar>
                             <Toolbar>
                                 <Title text="{i18n>products}"/>
@@ -248,13 +248,13 @@
                         <items>
                             <ColumnListItem type="Navigation" press="onProductItemPress">
                                 <cells>
-                                    <ObjectIdentifier title="{Name}"/>
-                                    <ObjectNumber number="{Price}" unit="{i18n>currency}"/>
-                                    <Text text="{Specs}" wrapping="false"/>
-                                    <Text text="{SupplierInfo}" wrapping="false"/>
-                                    <Text text="{MadeIn}" wrapping="false"/>
-                                    <Text text="{ProductionCompanyName}" wrapping="false"/>
-                                    <RatingIndicator editable="false" maxValue="5" value="{Rating}"/>
+                                    <ObjectIdentifier title="{storesModel>name}"/>
+                                    <ObjectNumber number="{storesModel>price}" unit="{i18n>currency}"/>
+                                    <Text text="{storesModel>specs}" wrapping="false"/>
+                                    <Text text="{storesModel>supplier_info}" wrapping="false"/>
+                                    <Text text="{storesModel>made_in}" wrapping="false"/>
+                                    <Text text="{storesModel>production_company_name}" wrapping="false"/>
+                                    <RatingIndicator editable="false" maxValue="5" value="{storesModel>rating}"/>
                                     <HBox justifyContent="End">
                                         <Button icon="sap-icon://edit" type="Transparent" press="onEditProductPress"/>
                                         <Button icon="sap-icon://sys-cancel" type="Transparent" press="onDeleteProductPress"/>
