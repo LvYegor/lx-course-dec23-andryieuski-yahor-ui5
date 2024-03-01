@@ -13,7 +13,7 @@
                     required="true"
                     placeholder="{i18n>enterName}"
                     value="{
-                        path : 'Name',
+                        path : 'newProductModel>name',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -29,7 +29,7 @@
                         required="true"
                         placeholder="{i18n>enterPrice}"
                         value="{
-                            path : 'Price',
+                            path : 'newProductModel>price',
                             type : 'sap.ui.model.type.Integer',
                             constraints: {
                                 minimum: 1
@@ -47,7 +47,7 @@
                     rows="3"
                     placeholder="{i18n>enterSpecs}"
                     value="{
-                        path : 'Specs',
+                        path : 'newProductModel>specs',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -62,7 +62,7 @@
                     required="true"
                     placeholder="{i18n>enterRating}"
                     value="{
-                        path : 'Rating',
+                        path : 'newProductModel>rating',
                         type : 'sap.ui.model.type.Integer',
                         constraints: {
                             minimum: 1,
@@ -79,7 +79,7 @@
                     rows="3"
                     placeholder="{i18n>enterSupplierInfo}"
                     value="{
-                        path : 'SupplierInfo',
+                        path : 'newProductModel>supplier_info',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -94,7 +94,7 @@
                     required="true"
                     placeholder="{i18n>enterMadeIn}"
                     value="{
-                        path : 'MadeIn',
+                        path : 'newProductModel>made_in',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -109,7 +109,7 @@
                     required="true"
                     placeholder="{i18n>enterProdCompany}"
                     value="{
-                        path : 'ProductionCompanyName',
+                        path : 'newProductModel>production_company_name',
                         type : 'sap.ui.model.type.String',
                         constraints : {
                             minLength: 1
@@ -119,7 +119,7 @@
                 />
 
                 <Label text="{i18n>status}" required="true"/>
-                <Select selectedKey="{Status}" id="createProductStatus">
+                <Select selectedKey="{newProductModel>status}" id="createProductStatus">
                     <core:Item text="{i18n>OK}" key="OK"/>
                     <core:Item text="{i18n>STORAGE}" key="STORAGE"/>
                     <core:Item text="{i18n>OUT_OF_STOCK}" key="OUT_OF_STOCK"/>

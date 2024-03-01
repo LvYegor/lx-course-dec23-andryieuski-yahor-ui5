@@ -53,39 +53,54 @@ sap.ui.define([
                 },
                 filter: {
                     selectedStatus: "ALL",
-                    searchValue: ""
+                    searchValue: "",
+                    orderBy: ""
                 },
                 sort: {
-                    Name: {
+                    name: {
                         columnName: "Name",
                         sortType: SORT_NONE
                     },
-                    Price: {
+                    price: {
                         columnName: "Price",
                         sortType: SORT_NONE
                     },
-                    Specs: {
+                    specs: {
                         columnName: "Specs",
                         sortType: SORT_NONE
                     },
-                    SupplierInfo: {
+                    supplier_info: {
                         columnName: "SupplierInfo",
                         sortType: SORT_NONE
                     },
-                    MadeIn: {
+                    made_in: {
                         columnName: "MadeIn",
                         sortType: SORT_NONE
                     },
-                    ProductionCompanyName: {
+                    production_company_name: {
                         columnName: "ProductionCompanyName",
                         sortType: SORT_NONE
                     },
-                    Rating: {
+                    rating: {
                         columnName: "Rating",
                         sortType: SORT_NONE
                     },
                 }
             });
+
+            const oNewProductModel = new JSONModel({
+                name: null,
+                price: null,
+                specs: null,
+                rating: null,
+                supplier_info: null,
+                made_in: null,
+                production_company_name: null,
+                status: null,
+                store: null
+            });
+
+            this.getView().setModel(oNewProductModel, "newProductModel");
 
             this.getView().setModel(oViewModel, "appView");
 
@@ -135,28 +150,19 @@ sap.ui.define([
          * @returns {void}
          */
         onTableUpdateFinished: function (oEvent) {
-            const oTable = oEvent.getSource();
-            const oKey = oTable.getBindingContext();
             const oViewModel = this.getView().getModel("appView");
+            const sStoreId = oViewModel.getProperty("/storeID");
+            const aStatuses = ["OK", "STORAGE", "OUT_OF_STOCK"];
 
-            const aStatuses = ["ALL", "OK", "STORAGE", "OUT_OF_STOCK"];
+            StoresModel.fetchFilteredStoreProductsById(sStoreId, "", "", "").then((oData) => {
+                oViewModel.setProperty("/statusAmount/all", oData.length);
+            });
 
-            console.log(oKey);
-
-            // aStatuses.forEach(function (sStatus) {
-            //     const aFilters = [];
-            //
-            //     if (sStatus !== "ALL") {
-            //         aFilters.push(new Filter("Status", FilterOperator.EQ, sStatus));
-            //     }
-            //
-            //     this.getView().getModel().read(`${oKey}/rel_Products/$count`, {
-            //         filters: aFilters,
-            //         success: function (oData) {
-            //             oViewModel.setProperty("/statusAmount/" + (sStatus === "ALL" ? "all" : sStatus.toLowerCase()), oData);
-            //         }
-            //     });
-            // }, this);
+            aStatuses.forEach(function (sStatus) {
+                StoresModel.fetchFilteredStoreProductsById(sStoreId, "", sStatus, "").then((oData) => {
+                    oViewModel.setProperty("/statusAmount/" + sStatus.toLowerCase(), oData.length);
+                });
+            });
         },
 
         /**
@@ -390,7 +396,7 @@ sap.ui.define([
             if (oFilterSettings.selectedStatus !== "ALL") {
                 aFilters.push(
                     new Filter({
-                        path: "Status",
+                        path: "status",
                         operator: FilterOperator.EQ,
                         value1: oFilterSettings.selectedStatus
                     })
@@ -401,37 +407,37 @@ sap.ui.define([
                 new Filter({
                     filters: [
                         new Filter({
-                            path: "Name",
+                            path: "name",
                             operator: FilterOperator.Contains,
                             value1: oFilterSettings.searchValue
                         }),
                         new Filter({
-                            path: "Price",
+                            path: "price",
                             operator: FilterOperator.EQ,
                             value1: !isNaN(oFilterSettings.searchValue) ? oFilterSettings.searchValue : null
                         }),
                         new Filter({
-                            path: "Specs",
+                            path: "specs",
                             operator: FilterOperator.Contains,
                             value1: oFilterSettings.searchValue
                         }),
                         new Filter({
-                            path: "Rating",
+                            path: "rating",
                             operator: FilterOperator.EQ,
                             value1: !isNaN(oFilterSettings.searchValue) ? oFilterSettings.searchValue : null
                         }),
                         new Filter({
-                            path: "SupplierInfo",
+                            path: "supplier_info",
                             operator: FilterOperator.Contains,
                             value1: oFilterSettings.searchValue
                         }),
                         new Filter({
-                            path: "MadeIn",
+                            path: "made_in",
                             operator: FilterOperator.Contains,
                             value1: oFilterSettings.searchValue
                         }),
                         new Filter({
-                            path: "ProductionCompanyName",
+                            path: "production_company_name",
                             operator: FilterOperator.Contains,
                             value1: oFilterSettings.searchValue
                         }),
@@ -458,25 +464,20 @@ sap.ui.define([
          */
         onCreateProductPress: function () {
             const oView = this.getView();
-
+            const oNewProductModel = oView.getModel("newProductModel");
             const oViewModel = oView.getModel("appView");
             oViewModel.setProperty("/editMode", false);
 
             this.prepareProductDialog(oView);
 
             this.pProductDialog.then(() => {
-                const oODataModel = oView.getModel();
+                oNewProductModel.setProperty("/store", oViewModel.getProperty("/storeID"));
+                oNewProductModel.setProperty("/status", "OK");
 
-                const oEntryContext = oODataModel.createEntry("/Products", {
-                    properties: {
-                        StoreId: oViewModel.getProperty("/storeID"),
-                        Status: "OK"
-                    }
+                this.oProductDialog.bindObject({
+                    model: "newProductModel",
+                    path: "/"
                 });
-
-                this.oProductDialog.setBindingContext(oEntryContext);
-
-                this.oProductDialog.setModel(oODataModel);
 
                 this.oProductDialog.open();
             });
@@ -521,9 +522,15 @@ sap.ui.define([
             }, this);
 
             if (!bValidationError) {
-                const oODataModel = oView.getModel();
+                const oViewModel = oView.getModel("appView");
+                const oNewProductModel = oView.getModel("newProductModel");
+                const oFormFields = oNewProductModel.getProperty("/");
 
-                oODataModel.submitChanges();
+                StoresModel.createNewProduct(oFormFields).then(() => {
+                    StoresModel.fetchStoreProductsById(oViewModel.getProperty("/storeID")).then((aProducts) => {
+                        oView.getModel("storesModel").setProperty("/StoreProducts", aProducts);
+                    });
+                });
 
                 this.oProductDialog.close();
 
@@ -654,10 +661,19 @@ sap.ui.define([
          * @returns {void}
          */
         onAfterCloseCreateDialog: function () {
-            const oODataModel = this.getView().getModel();
-            const oContext = this.oProductDialog.getBindingContext();
+            this.resetProductDialogFields();
+            this.resetValueStates();
+        },
 
-            oODataModel.deleteCreatedEntry(oContext);
+        resetProductDialogFields: function () {
+            this.byId("createProductName").setValue(null);
+            this.byId("createProductPrice").setValue(null);
+            this.byId("createProductSpecs").setValue(null);
+            this.byId("createProductRating").setValue(null);
+            this.byId("createProductSupplierInfo").setValue(null);
+            this.byId("createProductMadeIn").setValue(null);
+            this.byId("createProductProdCompany").setValue(null);
+            this.byId("createProductStatus").setValue(null);
         },
 
         /**
@@ -791,9 +807,14 @@ sap.ui.define([
          */
         onDeleteStoreDialogClose: function (sAction) {
             if (sAction === sap.m.MessageBox.Action.OK) {
-                const sPath = this.getView().getBindingContext().getPath();
+                const oViewModel = this.getView().getModel("appView");
+                const sStoreId = oViewModel.getProperty("/storeID");
 
-                this.getView().getModel().remove(sPath);
+                StoresModel.deleteStoreById(sStoreId).then(() => {
+                    StoresModel.fetchStores().then((aStores) => {
+                        this.getView().getModel("storesModel").setProperty("/Stores", aStores);
+                    });
+                });
 
                 this.oRouter.navTo("StoresOverview");
             }

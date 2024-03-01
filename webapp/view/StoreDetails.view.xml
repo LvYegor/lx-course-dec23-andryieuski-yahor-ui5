@@ -57,11 +57,7 @@
 
                         <Label text="{i18n>establishedDate}" />
                         <Text text="{
-                            path: 'storesModel>/DetailStore/established',
-                            type: 'sap.ui.model.type.Date',
-                            formatOptions: {
-                                style: 'medium'
-                            }
+                            path: 'storesModel>/DetailStore/established'
                         }" />
 
                         <Label text="{i18n>floorArea}" />
@@ -134,12 +130,12 @@
                                     <Button
                                         type="Transparent"
                                         icon="sap-icon://{
-                                            path: 'appView>/sort/Name/sortType',
+                                            path: 'appView>/sort/name/sortType',
                                             formatter: '.sortTypeFormatter'
                                         }"
                                         press="onSortButtonPress">
                                         <customData>
-                                            <core:CustomData value="Name"/>
+                                            <core:CustomData value="name"/>
                                         </customData>
                                     </Button>
                                     <Text text="{i18n>name}"/>
@@ -150,12 +146,12 @@
                                     <Button
                                         type="Transparent"
                                         icon="sap-icon://{
-                                            path: 'appView>/sort/Price/sortType',
+                                            path: 'appView>/sort/price/sortType',
                                             formatter: '.sortTypeFormatter'
                                         }"
                                         press="onSortButtonPress">
                                         <customData>
-                                            <core:CustomData value="Price"/>
+                                            <core:CustomData value="price"/>
                                         </customData>
                                     </Button>
                                     <Text text="{i18n>price}"/>
@@ -166,12 +162,12 @@
                                     <Button
                                         type="Transparent"
                                         icon="sap-icon://{
-                                            path: 'appView>/sort/Specs/sortType',
+                                            path: 'appView>/sort/specs/sortType',
                                             formatter: '.sortTypeFormatter'
                                         }"
                                         press="onSortButtonPress">
                                         <customData>
-                                            <core:CustomData value="Specs"/>
+                                            <core:CustomData value="specs"/>
                                         </customData>
                                     </Button>
                                     <Text text="{i18n>specs}"/>
@@ -182,12 +178,12 @@
                                     <Button
                                         type="Transparent"
                                         icon="sap-icon://{
-                                            path: 'appView>/sort/SupplierInfo/sortType',
+                                            path: 'appView>/sort/supplier_info/sortType',
                                             formatter: '.sortTypeFormatter'
                                         }"
                                         press="onSortButtonPress">
                                         <customData>
-                                            <core:CustomData value="SupplierInfo"/>
+                                            <core:CustomData value="supplier_info"/>
                                         </customData>
                                     </Button>
                                     <Text text="{i18n>supplierInfo}"/>
@@ -198,12 +194,12 @@
                                     <Button
                                         type="Transparent"
                                         icon="sap-icon://{
-                                            path: 'appView>/sort/MadeIn/sortType',
+                                            path: 'appView>/sort/made_in/sortType',
                                             formatter: '.sortTypeFormatter'
                                         }"
                                         press="onSortButtonPress">
                                         <customData>
-                                            <core:CustomData value="MadeIn"/>
+                                            <core:CustomData value="made_in"/>
                                         </customData>
                                     </Button>
                                     <Text text="{i18n>madeIn}"/>
@@ -214,12 +210,12 @@
                                     <Button
                                         type="Transparent"
                                         icon="sap-icon://{
-                                            path: 'appView>/sort/ProductionCompanyName/sortType',
+                                            path: 'appView>/sort/production_company_name/sortType',
                                             formatter: '.sortTypeFormatter'
                                         }"
                                         press="onSortButtonPress">
                                         <customData>
-                                            <core:CustomData value="ProductionCompanyName"/>
+                                            <core:CustomData value="production_company_name"/>
                                         </customData>
                                     </Button>
                                     <Text text="{i18n>prodCompany}"/>
@@ -230,12 +226,12 @@
                                     <Button
                                         type="Transparent"
                                         icon="sap-icon://{
-                                            path: 'appView>/sort/Rating/sortType',
+                                            path: 'appView>/sort/rating/sortType',
                                             formatter: '.sortTypeFormatter'
                                         }"
                                         press="onSortButtonPress">
                                         <customData>
-                                            <core:CustomData value="Rating"/>
+                                            <core:CustomData value="rating"/>
                                         </customData>
                                     </Button>
                                     <Text text="{i18n>rating}"/>

@@ -280,20 +280,20 @@ sap.ui.define([
             this.validateDateInputPresence(this.byId("createStoreDate"));
 
             if (!bValidationError) {
-                const oStoresModel = oView.getModel("storesModel");
                 const oNewStoreModel = oView.getModel("newStoreModel");
+
+                const sDateField = oNewStoreModel.getProperty("/established");
+                const sFormattedDate = this.formatDate(sDateField);
+
+                oNewStoreModel.setProperty("/established", sFormattedDate)
+
                 const oFormFields = oNewStoreModel.getProperty("/");
 
-                StoresModel.createNewStore(oFormFields);
-
-                // const aStores = oStoresModel.getProperty("/Stores")
-                // aStores.push(oFormFields);
-                //
-                // oStoresModel.setProperty("/Stores", aStores);
-
-                StoresModel.fetchStores().then((aStores) => {
-                    this.getView().getModel("storesModel").setData({
-                        Stores: aStores
+                StoresModel.createNewStore(oFormFields).then(() => {
+                    StoresModel.fetchStores().then((aStores) => {
+                        this.getView().getModel("storesModel").setData({
+                            Stores: aStores
+                        });
                     });
                 });
 
@@ -305,6 +305,11 @@ sap.ui.define([
                 const sValidationAlert = oBundle.getText("validationAlert");
                 MessageBox.alert(sValidationAlert);
             }
+        },
+
+        formatDate: function(oDate) {
+            var oFormat = sap.ui.core.format.DateFormat.getInstance({ pattern: "yyyy-MM-dd" });
+            return oFormat.format(oDate);
         },
 
         /**

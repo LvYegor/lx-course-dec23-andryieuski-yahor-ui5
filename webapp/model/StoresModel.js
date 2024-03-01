@@ -45,8 +45,7 @@ sap.ui.define([], function() {
                 email: data.email,
                 phone_number: data.phone_number,
                 address: data.address,
-                // established: data.established,
-                established: "2024-01-01",
+                established: data.established,
                 floor_area: data.floor_area
             };
 
@@ -59,10 +58,73 @@ sap.ui.define([], function() {
             }).catch(console.error);
         },
 
+        /**
+         * Create a new product for the current store.
+         * @param {Object} data - The data for the new product.
+         * @returns {Promise} A promise that resolves with the response data or rejects with an error.
+         */
+        createNewProduct: function (data){
+            const newProduct = {
+                name: data.name,
+                price: data.price,
+                specs: data.specs,
+                rating: data.rating,
+                supplier_info: data.supplier_info,
+                made_in: data.made_in,
+                production_company_name: data.production_company_name,
+                status: data.status,
+                store: data.store
+            };
+            return fetch(sHostURL + "products/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                },
+                body: JSON.stringify(newProduct)
+            }).catch(console.error);
+        },
+
         fetchStoreProductsById: function (id) {
             return fetch(sHostURL + `stores/${id}/products/`)
                 .then(response => response.json())
                 .catch(console.error);
+        },
+
+        /**
+         * Fetch filtered products for a specific store based on various parameters.
+         * @param {number} storeId - The ID of the store.
+         * @param {string|null} inputValue - The input value for filtering product attributes.
+         * @param {string|null} filterStatus - The status for filtering products.
+         * @param {string|null} orderBy - The field to use for sorting products.
+         * @returns {Promise} A promise that resolves with the response data or rejects with an error.
+         */
+        fetchFilteredStoreProductsById: function (
+            storeId,
+            inputValue = null,
+            filterStatus = null,
+            orderBy = null
+        ) {
+            const queryParams = new URLSearchParams(
+                {
+                    search: inputValue,
+                    status: filterStatus,
+                    ordering: orderBy
+                }
+            );
+            const urlWithParams = `${sHostURL}stores/${storeId}/products?${queryParams.toString()}`;
+
+            return fetch(urlWithParams)
+                .then(response => response.json())
+                .catch(console.error);
+        },
+
+        /**
+         * Delete a store by ID.
+         * @param {number} id - The ID of the store to delete.
+         * @returns {Promise} A promise that resolves with the response data or rejects with an error.
+         */
+        deleteStoreById: function (id) {
+            return fetch(sHostURL + `stores/${id}`, {method: "DELETE"}).catch(console.error);
         },
     };
 });
