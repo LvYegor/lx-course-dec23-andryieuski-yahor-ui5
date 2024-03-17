@@ -526,11 +526,19 @@ sap.ui.define([
                 const oNewProductModel = oView.getModel("newProductModel");
                 const oFormFields = oNewProductModel.getProperty("/");
 
-                StoresModel.createNewProduct(oFormFields).then(() => {
-                    StoresModel.fetchStoreProductsById(oViewModel.getProperty("/storeID")).then((aProducts) => {
-                        oView.getModel("storesModel").setProperty("/StoreProducts", aProducts);
+                if (bEditMode === false) {
+                    StoresModel.createNewProduct(oFormFields).then(() => {
+                        StoresModel.fetchStoreProductsById(oViewModel.getProperty("/storeID")).then((aProducts) => {
+                            oView.getModel("storesModel").setProperty("/StoreProducts", aProducts);
+                        });
                     });
-                });
+                } else {
+                    StoresModel.updateProduct(oFormFields, oFormFields.id).then(() => {
+                        StoresModel.fetchStoreProductsById(oViewModel.getProperty("/storeID")).then((aProducts) => {
+                            oView.getModel("storesModel").setProperty("/StoreProducts", aProducts);
+                        });
+                    });
+                }
 
                 this.oProductDialog.close();
 
@@ -645,8 +653,8 @@ sap.ui.define([
          * @returns {void}
          */
         onAfterCloseEditDialog: function () {
-            const oODataModel = this.getView().getModel();
-            oODataModel.resetChanges();
+            const oProductModel = this.getView().getModel("newProductModel");
+            oProductModel.setData({});
         },
 
         /**
@@ -724,9 +732,11 @@ sap.ui.define([
             const oView = this.getView();
             const oViewModel = oView.getModel("appView");
             const oItem = oEvent.getSource();
-            const sPath = oItem.getBindingContext().getPath();
+            const oContext = oItem.getBindingContext("storesModel");
 
-            oViewModel.setProperty("/pathDeleteProduct", sPath);
+            const oProductData = oContext.getObject();
+
+            oViewModel.setProperty("/deleteProductId", oProductData.id);
 
             MessageBox.confirm(sDeleteStoreConfirmText, {
                 title: sConfirmation,
@@ -755,9 +765,14 @@ sap.ui.define([
             if (sAction === sap.m.MessageBox.Action.OK) {
                 const oView = this.getView();
                 const oViewModel = oView.getModel("appView");
-                const sPath = oViewModel.getProperty("/pathDeleteProduct");
+                const sProductId = oViewModel.getProperty("/deleteProductId");
+                const sStoreID = oViewModel.getProperty("/storeID");
 
-                this.getView().getModel().remove(sPath);
+                StoresModel.deleteProductFromStoreById(sProductId).then(() => {
+                    StoresModel.fetchStoreProductsById(sStoreID).then((aProducts) => {
+                        this.getView().getModel("storesModel").setProperty("/StoreProducts", aProducts);
+                    });
+                });
 
                 const oBundle = oView.getModel("i18n").getResourceBundle();
                 const sNotification = oBundle.getText("deleteProductNotification");
@@ -842,12 +857,17 @@ sap.ui.define([
             this.prepareProductDialog(oView);
 
             this.pProductDialog.then(() => {
-                const oProductContext = oEvent.getSource().getBindingContext();
-                const oODataModel = oView.getModel();
+                const oProductContext = oEvent.getSource().getBindingContext("storesModel");
+                const oProductData = oProductContext.getObject();
 
-                this.oProductDialog.setBindingContext(oProductContext);
+                const oProductModel = oView.getModel("newProductModel");
 
-                this.oProductDialog.setModel(oODataModel);
+                oProductModel.setData(oProductData)
+
+                this.oProductDialog.bindObject({
+                    model: "newProductModel",
+                    path: "/"
+                });
 
                 this.oProductDialog.open();
             });

@@ -84,6 +84,33 @@ sap.ui.define([], function() {
             }).catch(console.error);
         },
 
+        /**
+         * Update a product by ID.
+         * @param {Object} data - The updated data for the product.
+         * @param {number} productId - The ID of the product to update.
+         * @returns {Promise} A promise that resolves with the response data or rejects with an error.
+         */
+        updateProduct: function (data, productId){
+            const newProduct = {
+                name: data.name,
+                price: data.price,
+                specs: data.specs,
+                rating: data.rating,
+                supplier_info: data.supplier_info,
+                made_in: data.made_in,
+                production_company_name: data.production_company_name,
+                status: data.status,
+                store: data.store
+            };
+            return fetch(sHostURL + `products/${productId}/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                },
+                body: JSON.stringify(newProduct)
+            }).catch(console.error);
+        },
+
         fetchStoreProductsById: function (id) {
             return fetch(sHostURL + `stores/${id}/products/`)
                 .then(response => response.json())
@@ -125,6 +152,15 @@ sap.ui.define([], function() {
          */
         deleteStoreById: function (id) {
             return fetch(sHostURL + `stores/${id}`, {method: "DELETE"}).catch(console.error);
+        },
+
+        /**
+         * Delete a product from the current store by ID.
+         * @param {number} id - The ID of the product to delete.
+         * @returns {Promise} A promise that resolves with the response data or rejects with an error.
+         */
+        deleteProductFromStoreById: function (id){
+            return fetch(sHostURL + `products/${id}`, {method: "DELETE"}).catch(console.error);
         },
     };
 });
