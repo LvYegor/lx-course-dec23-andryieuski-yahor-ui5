@@ -7,13 +7,14 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
+    "yahor/andryieuski/model/StoresModel",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/m/MessageBox",
     "sap/m/MessageToast",
     "sap/base/strings/formatMessage",
     "sap/base/i18n/Localization"
-], function (Controller, JSONModel, Filter, FilterOperator, MessageBox, MessageToast, formatMessage, Localization) {
+], function (Controller, JSONModel, StoresModel, Filter, FilterOperator, MessageBox, MessageToast, formatMessage, Localization) {
     "use strict";
 
     const oColorScheme = {OK: 8, STORAGE: 1, OUT_OF_STOCK: 3};
@@ -42,11 +43,10 @@ sap.ui.define([
             });
 
             const oFeedModel = new JSONModel({
-                Author: "",
-                Message: "",
-                Rating: 0,
-                Posted: null,
-                ProductId: null
+                author: "",
+                message: "",
+                rating: 0,
+                productId: null
             });
 
             this.getView().setModel(oViewModel, "appView");
@@ -73,26 +73,19 @@ sap.ui.define([
         onPatternMatched: function (oEvent) {
             const mRouteArguments = oEvent.getParameter("arguments");
             const sProductID = mRouteArguments.productID;
-            const oODataModel = this.getView().getModel();
             const oViewModel = this.getView().getModel("appView");
+            const oStoresModel = this.getView().getModel("storesModel");
 
-            oViewModel.setProperty("/ProductID", sProductID);
+            oViewModel.setProperty("/productID", sProductID);
 
-            oODataModel.metadataLoaded().then(function () {
-                const sKey = oODataModel.createKey("/Products", {id: sProductID});
+            StoresModel.fetchProductById(sProductID).then((oProduct) => {
+                oStoresModel.setProperty("/DetailProduct", oProduct);
+                this.changeStatusStyle(oStoresModel.getProperty("/DetailProduct/status"));
+            });
 
-                this.getView().bindObject({
-                    path: sKey
-                });
-
-                this.getView().getModel().read(sKey, {
-                    success: function (oData) {
-                        this.changeStatusStyle(oData.Status);
-                    }.bind(this)
-                });
-
-                this.filterCommentsByProductId();
-            }.bind(this));
+            StoresModel.fetchProductCommentsById(sProductID).then((aComments) => {
+                oStoresModel.setProperty("/ProductComments", aComments);
+            });
         },
 
         /**
@@ -128,10 +121,10 @@ sap.ui.define([
          * @returns {void}
          */
         onStoreDetailsBreadcrumbPress: function (oEvent) {
-            const oContext = oEvent.getSource().getBindingContext();
+            const oStoresModel = this.getView().getModel("storesModel");
 
             this.oRouter.navTo("StoreDetails", {
-                storeID: oContext.getProperty("StoreId")
+                storeID: oStoresModel.getProperty("/storeID")
             });
         },
 
@@ -234,24 +227,21 @@ sap.ui.define([
             }, this);
 
             if (!bValidationError) {
-                const oItem = oEvent.getSource();
-                const oContext = oItem.getBindingContext();
-                const oModel = this.getView().getModel();
+                const oViewModel = this.getView().getModel("appView");
+                const oStoresModel = this.getView().getModel("storesModel");
 
                 const oPayload = {
-                    Author: this.byId("feedAuthor").getValue(),
-                    Message: this.byId("feedText").getValue(),
-                    Rating: this.byId("feedRating").getValue(),
-                    Posted: new Date(),
-                    ProductId: oContext.getProperty("id")
+                    author: this.byId("feedAuthor").getValue(),
+                    message: this.byId("feedText").getValue(),
+                    rating: this.byId("feedRating").getValue(),
+                    product: oViewModel.getProperty("/productID")
                 };
 
-                const oNewCommentContext = oModel.createEntry("/ProductComments", {
-                    properties: oPayload,
-                    success: this.filterCommentsByProductId.bind(this)
+                StoresModel.createNewComment(oPayload).then(() => {
+                    StoresModel.fetchProductCommentsById(oViewModel.getProperty("/productID")).then((aComments) => {
+                        oStoresModel.setProperty("/ProductComments", aComments);
+                    });
                 });
-
-                oModel.submitChanges();
 
                 this.resetFeedFields();
 
@@ -307,6 +297,21 @@ sap.ui.define([
             }
 
             return bValidationError;
+        },
+
+        formatDate: function(sDetailPostedDate, sPosted) {
+            const oPostedDate = new Date(sPosted);
+
+            if (isNaN(oPostedDate.getTime())) {
+                return "Invalid Date";
+            }
+
+            const oDateTimeFormat = new Intl.DateTimeFormat(undefined, {
+                dateStyle: "medium",
+                timeStyle: "medium"
+            });
+
+            return sDetailPostedDate + " " + oDateTimeFormat.format(oPostedDate);
         },
 
         /**

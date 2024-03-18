@@ -162,5 +162,33 @@ sap.ui.define([], function() {
         deleteProductFromStoreById: function (id){
             return fetch(sHostURL + `products/${id}`, {method: "DELETE"}).catch(console.error);
         },
+
+        fetchProductById: function (id) {
+            return fetch(sHostURL + `products/${id}`)
+                .then(response => response.json())
+                .catch(console.error);
+        },
+
+        fetchProductCommentsById: function (id) {
+            return fetch(sHostURL + `products/${id}/comments/`)
+                .then(response => response.json())
+                .catch(console.error);
+        },
+
+        createNewComment: function (data){
+            const newComment = {
+                author: data.author,
+                message: data.message,
+                rating: data.rating,
+                product: data.product,
+            };
+            return fetch(sHostURL + "comments/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                },
+                body: JSON.stringify(newComment)
+            }).catch(console.error);
+        },
     };
 });

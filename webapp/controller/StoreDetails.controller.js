@@ -124,10 +124,11 @@ sap.ui.define([
         onPatternMatched: function (oEvent) {
             const mRouteArguments = oEvent.getParameter("arguments");
             const sStoreID = mRouteArguments.storeID;
-            // const oODataModel = this.getView().getModel();
             const oViewModel = this.getView().getModel("appView");
+            const oStoresModel = this.getView().getModel("storesModel");
 
             oViewModel.setProperty("/storeID", sStoreID);
+            oStoresModel.setProperty("/storeID", sStoreID);
 
             StoresModel.fetchStoreById(sStoreID).then((oStore) => {
                 this.getView().getModel("storesModel").setProperty("/DetailStore", oStore);
@@ -196,7 +197,7 @@ sap.ui.define([
          * @returns {void}
          */
         onProductItemPress: function (oEvent) {
-            const oContext = oEvent.getSource().getBindingContext();
+            const oContext = oEvent.getSource().getBindingContext("storesModel");
 
             this.oRouter.navTo("ProductDetails", {
                 productID: oContext.getProperty("id")

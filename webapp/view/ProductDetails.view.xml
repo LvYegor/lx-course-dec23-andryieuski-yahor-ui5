@@ -23,7 +23,7 @@
                         text="{
                             parts: [
                                 'i18n>productDetailsTitle',
-                                'Name'
+                                'storesModel>/DetailProduct/name'
                             ],
                             formatter: 'formatMessage'
                         }"
@@ -61,31 +61,31 @@
                             text="{
                                 parts: [
                                     'i18n>detailCurrency',
-                                    'Price'
+                                    'storesModel>/DetailProduct/price'
                                 ],
                                 formatter: 'formatMessage'
                             }"
                         />
 
                         <Label text="{i18n>rating}" />
-                        <Text text="{Rating}" />
+                        <Text text="{storesModel>/DetailProduct/rating}" />
 
                         <Label text="{i18n>specs}" />
-                        <Text text="{Specs}" />
+                        <Text text="{storesModel>/DetailProduct/specs}" />
 
                         <Label text="{i18n>supplierInfo}" />
-                        <Text text="{SupplierInfo}" />
+                        <Text text="{storesModel>/DetailProduct/supplier_info}" />
 
                         <Label text="{i18n>prodCompany}" />
-                        <Text text="{ProductionCompanyName}" />
+                        <Text text="{storesModel>/DetailProduct/production_company_name}" />
 
                         <Label text="{i18n>madeIn}" />
-                        <Text text="{MadeIn}" />
+                        <Text text="{storesModel>/DetailProduct/made_in}" />
 
                         <Label text="{i18n>status}" />
                         <tnt:InfoLabel
                             id="productStatus"
-                            text="{path: 'Status', formatter: '.formatStatus'}"
+                            text="{path: 'storesModel>/DetailProduct/status', formatter: '.formatStatus'}"
                             renderMode="Loose"
                         />
                     </form:content>
@@ -130,18 +130,18 @@
                 <List
                     showSeparators="Inner"
                     items="{
-                        path: 'appView>/ProductComments',
+                        path: 'storesModel>/ProductComments',
                         sorter: {
-                            path: 'Posted',
+                            path: 'posted',
                             descending: true
                         }
                     }">
                     <FeedListItem
-                        sender="{appView>Author}"
+                        sender="{storesModel>author}"
                         info="{
                             parts: [
                                 'i18n>detailRating',
-                                'appView>Rating'
+                                'storesModel>rating'
                             ],
                             formatter: 'formatMessage'
                         }"
@@ -149,11 +149,11 @@
                         timestamp="{
                             parts: [
                                 { path: 'i18n>detailPostedDate' },
-                                { path: 'appView>Posted', type: 'sap.ui.model.type.Date', formatOptions: {style: 'medium'} }
+                                { path: 'storesModel>posted' }
                             ],
-                            formatter: 'formatMessage'
+                            formatter: '.formatDate'
                         }"
-                        text="{appView>Message}"
+                        text="{storesModel>message}"
                         convertLinksToAnchorTags="All"
                     />
                 </List>
